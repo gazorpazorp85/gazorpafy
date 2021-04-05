@@ -1,0 +1,22 @@
+.latest-release-container {
+    margin-bottom: 20px;
+    
+    .title {
+        color: $clr1;
+        font-family: "arimo-bold";
+        margin-bottom: 15px;
+    }
+
+    & img {
+        width: 100px;
+        margin-inline-end: 20px;
+    }
+
+    & .latest-release-info {
+        font-size: rem(14px);
+        
+        & :last-child {
+            font-size: rem(12px);   
+        }
+    }
+}

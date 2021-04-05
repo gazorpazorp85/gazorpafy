@@ -1,0 +1,16 @@
+.gazorpafy-container {
+    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: "side-bar main-view" "player player";
+}
+
+.main-content-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    grid-area: main-view;
+}
+

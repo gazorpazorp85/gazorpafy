@@ -1,0 +1,40 @@
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: fit-content;
+    border: 1px solid $clr2;
+    border-radius: 20px;
+    padding: 10px 40px;
+    text-transform: uppercase;
+    font-size: rem(12px);
+
+    &:focus {
+        outline: none;
+    }
+
+    &.play {
+        background-color: $clr3;
+        color: $clr1;
+        margin-top: 20px;
+    }
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-transform: capitalize;
+
+    &.login {
+        background-color: $clr3;
+        border-radius: 23px;
+        color: $clr1;
+        padding: 6px 10px;
+        font-family: "arimo-bold";
+        font-size: 26px;
+        margin-top: 20px;
+    }
+}

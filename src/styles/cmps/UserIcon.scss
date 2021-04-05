@@ -1,0 +1,60 @@
+.user-icon-container {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 23px;
+    height: 32px;
+    min-width: 32px;
+    color: $clr1;
+    padding: 2px;
+    margin-inline-start: auto;
+    font-family: "arimo-bold";
+    font-size: 14px;
+
+    &.open {
+        background-color: #282828;
+    }
+
+    &:hover {
+        background-color: #282828;
+    }
+
+    & img {
+        border-radius: 50%;
+        width: 28px;
+        height: 28px;
+        object-fit: cover;
+    }
+
+    & > div:first-of-type {
+        margin: 0px 8px;
+    }
+
+    & .arrow-img {
+        height: 6px;
+        width: 10px;
+        margin-inline-end: 6px;
+
+        &.open {
+            transform: rotate(180deg);
+        }
+    }
+
+    & .user-menu {
+        width: 100%;
+        position: absolute;
+        background-color: #282828;
+        top: 100%;
+        border-radius: 4px;
+        padding: 4px 4px 0;
+        margin-top: 8px;
+        box-shadow: 0 16px 24px rgba(0, 0, 0, 30%), 0 6px 8px rgba(0, 0, 0, 20%);
+
+        &-item {
+            color: hsla(0%, 0%, 100%, 0.7);
+            line-height: 32px;
+            padding: 3px 4px 3px 8px;
+            margin-bottom: 4px;
+            border-radius: 2px;
+        }
+    }
+}

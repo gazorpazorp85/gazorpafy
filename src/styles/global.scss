@@ -1,0 +1,26 @@
+// Setup
+@import "setup/functions";
+@import "setup/mixins";
+@import "setup/variables";
+
+// Basics
+@import "basics/base";
+@import "basics/buttons";
+@import "basics/helpers";
+@import "basics/input";
+@import "basics/layout";
+@import "basics/typography";
+
+// cmps
+@import "cmps/NavBar.scss";
+@import "cmps/Player.scss";
+@import "cmps/Search.scss";
+@import "cmps/SideBar.scss";
+@import "cmps/UserIcon.scss";
+@import "cmps/details/LatestRelease.scss";
+
+// pages
+@import "views/Details.scss";
+@import "views/GazorpafyApp.scss";
+@import "views/ListContainer.scss";
+@import "views/Playlist.scss";

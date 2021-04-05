@@ -1,18 +1,21 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <section class="flex column align-center center full w100 main-container">
+    <h1>Welcome To Gazorpafy</h1>
+    <p>
+      Gazorpafy is a spotify player made with Vue. Gazorpafy is available to
+      Spotify Premium Users only.
+    </p>
+    <a
+      class="btn login"
+      href="//localhost:3030/api/auth/login"
+    >
+      get started
+    </a>
+  </section>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
   name: 'Home',
-  components: {
-    HelloWorld
-  }
 }
 </script>

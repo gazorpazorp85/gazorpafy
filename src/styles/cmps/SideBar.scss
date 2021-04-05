@@ -1,0 +1,21 @@
+.side-bar-container {
+    background-color: $clr2;
+    max-width: 210px;
+    height: 100%;
+    grid-area: side-bar;
+
+    & h1 {
+        color: $clr1;
+        text-align: center;
+    }
+}
+
+.img-placeholder {
+    height: 210px;
+    width: 210px;
+    margin-block-start: auto;
+}
+
+.album-artwork {
+    margin-block-start: auto;
+}
