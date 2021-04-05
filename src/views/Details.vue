@@ -40,7 +40,7 @@
               :key="album.id"
               class="flex column"
             >
-              <img :src="album.images[1].url" alt="" />
+              <img :src="album.images[1].url" alt="" class="album-artwork" />
               <div>{{ album.name }}</div>
               <div>{{ album.release_date.substring(0, 4) }}</div>
             </div>
@@ -112,9 +112,9 @@ export default {
     },
     albumsMap() {
       const { albums } = JSON.parse(JSON.stringify(this.artist));
-      const albumTypes = [...new Set(albums.map(album => album.album_type))];
-      const albumsMap = albumTypes.reduce((acc, type) => {
-        return { ...acc, [type]: albums.filter(album => album.album_type === type) };
+      const albumGroups = [...new Set(albums.map(album => album.album_group))];
+      const albumsMap = albumGroups.reduce((acc, group) => {
+        return { ...acc, [group]: albums.filter(album => album.album_group === group) };
       }, {});
       return albumsMap;
     }

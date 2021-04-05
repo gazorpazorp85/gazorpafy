@@ -97,4 +97,9 @@
         color: $clr1;
         border: 1px solid $clr1;
     }
+
+    & .album-artwork {
+        height: 200px;
+        width: 200px;
+    }
 }
