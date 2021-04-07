@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     setIdx(value, playlist) {
-      console.log(playlist);
       if (value < 0 && this.idx + value < 0) return;
       if (value > 0 && this.idx + value >= playlist.items.length) return;
       this.idx += value;

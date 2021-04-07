@@ -25,7 +25,7 @@ export const playerStore = {
       state.deviceId = deviceId;
     },
     updateState(state, { currentState }) {
-      console.log(currentState);
+      console.log('player currentState: ', currentState);
       if (currentState) {
         const { current_track: currentTrack } = currentState.track_window;
         const { duration, position } = currentState;

@@ -1,7 +1,7 @@
 <template>
   <router-link
     class="flex column card"
-    :to="{ path: `gazorpafy/${item.type}/${item.id}` }"
+    :to="{ path: `/gazorpafy/${item.type}/${item.id}` }"
   >
     <img v-if="item.images.length > 0" :src="item.images[0].url" />
     <div class="title">{{ item.name }}</div>

@@ -71,9 +71,9 @@ export default {
     },
     time(unit) {
       return unit => {
-        const minutes = Math.floor(unit / 60000);
-        const seconds = Math.floor((unit % 60000) / 1000);
-        return `${minutes <= 0 ? `00` : minutes < 10 ? `0${minutes}` : `${minutes}`}:${seconds < 10 ? `0${seconds}` : `${seconds}`}`;
+        const minutes = (Math.floor(unit / 60000)) + '';
+        const seconds = (Math.floor((unit % 60000) / 1000)) + '';
+        return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
       }
     },
     playerState() {

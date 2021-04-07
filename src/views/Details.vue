@@ -31,20 +31,14 @@
         </div>
       </div>
       <button @click="toggleShowMore">{{ buttonTxt }}</button>
-      <div v-for="key in Object.keys(albumsMap)" :key="key" class="flex">
-        <div class="flex column">
-          <div>{{ key }}</div>
-          <div class="flex">
-            <div
-              v-for="album in albumsMap[key]"
-              :key="album.id"
-              class="flex column"
-            >
-              <img :src="album.images[1].url" alt="" class="album-artwork" />
-              <div>{{ album.name }}</div>
-              <div>{{ album.release_date.substring(0, 4) }}</div>
-            </div>
-          </div>
+      <div
+        v-for="key in Object.keys(albumsMap)"
+        :key="key"
+        class="flex column cards-container"
+      >
+        <div class="flex column center list-header">
+          <div class="list-title">{{ formatKey(key) }}</div>
+          <List :items="albumsMap[key]" />
         </div>
       </div>
     </template>
@@ -55,6 +49,7 @@
 
 import Header from '@/cmps/Details/Header';
 import LatestRelease from '@/cmps/Details/LatestRelease';
+import List from '../cmps/ListContainer/List';
 
 import { spotifyService } from '@/services/spotify.service';
 
@@ -75,7 +70,6 @@ export default {
         const { artists } = await spotifyService.get(`${artist.href}/related-artists`, token);
         const { tracks } = await spotifyService.get(`${artist.href}/top-tracks?market=us`, token);
         this.artist = { albums: items, artist, artists, tracks }
-        console.log(this.artist);
       } catch (err) {
         console.log('failed to get info', err);
       }
@@ -95,9 +89,9 @@ export default {
     },
     time(unit) {
       return unit => {
-        const minutes = Math.floor(unit / 60000);
-        const seconds = Math.floor((unit % 60000) / 1000);
-        return `${minutes <= 0 ? `00` : minutes < 10 ? `0${minutes}` : `${minutes}`}:${seconds < 10 ? `0${seconds}` : `${seconds}`}`;
+        const minutes = (Math.floor(unit / 60000)) + '';
+        const seconds = (Math.floor((unit % 60000) / 1000)) + '';
+        return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
       }
     },
     buttonTxt() {
@@ -112,16 +106,21 @@ export default {
     },
     albumsMap() {
       const { albums } = JSON.parse(JSON.stringify(this.artist));
-      const albumGroups = [...new Set(albums.map(album => album.album_group))];
+      const editedAlbums = albums.map(albums => ({ ...albums, type: 'album' }))
+      const albumGroups = [...new Set(editedAlbums.map(album => album.album_group))];
       const albumsMap = albumGroups.reduce((acc, group) => {
         return { ...acc, [group]: albums.filter(album => album.album_group === group) };
       }, {});
       return albumsMap;
+    },
+    formatKey(key) {
+      return key => key.replaceAll('_', ' ');
     }
   },
   components: {
     Header,
-    LatestRelease
+    LatestRelease,
+    List
   },
   created() {
     this.getArtistDetails();

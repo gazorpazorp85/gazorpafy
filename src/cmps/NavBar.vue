@@ -1,11 +1,17 @@
 <template>
-  <div class="flex main-container nav-bar-container w100">
-    <div class="flex">
-      <span @click="changeRoute(-1)" class="material-icons"> arrow_back_ios </span>
-      <span @click="changeRoute(1)" class="material-icons"> arrow_forward_ios </span>
+  <div class="flex nav-bar-container">
+    <div class="flex nav-bar-container-contents">
+      <div class="flex">
+        <span @click="changeRoute(-1)" class="material-icons">
+          arrow_back_ios
+        </span>
+        <span @click="changeRoute(1)" class="material-icons">
+          arrow_forward_ios
+        </span>
+      </div>
+      <Search @search="search" />
+      <UserIcon v-if="loggedInUser" :user="loggedInUser" />
     </div>
-    <Search @search="search" />
-    <UserIcon v-if="loggedInUser" :user="loggedInUser" />
   </div>
 </template>
 

@@ -12,17 +12,16 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
     component: Home
   },
   {
     path: '/gazorpafy',
-    name: 'Gazorpafy',
     component: GazorpafyApp,
     children: [
       { path: 'playlist/:id', component: Playlist },
       { path: '', component: ListContainer },
-      { path: 'artist/:id', component: Details }
+      { path: 'artist/:id', component: Details },
+      { path: 'album/:id', component: Playlist },
     ]
   },
 ]

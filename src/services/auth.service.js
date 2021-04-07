@@ -32,8 +32,7 @@ async function getToken() {
 
 async function logout() {
     try {
-        const { data } = await Axios.post('/logout');
-        console.log(data);
+        await Axios.post('/logout');
     } catch (err) {
         console.log('failed to logout');
     }

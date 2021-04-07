@@ -43,8 +43,9 @@ async function transferPlayback(deviceId) {
     }
 }
 
-async function getAlbumTracks(id, token) {
+async function getAlbumTracks(id) {
     try {
+        const token = await authService.getToken();
         const { data } = await axios.get(`${BASE_URL}/albums/${id}/tracks`, _createHeaders(token));
         return data;
     } catch (err) {
