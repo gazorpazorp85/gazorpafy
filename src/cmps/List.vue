@@ -1,5 +1,5 @@
 <template>
-  <div class="flex preview-container" v-if="items && items.length > 0">
+  <div class="preview-container" v-if="items && items.length > 0">
     <Preview
       v-for="item in items"
       :key="item.id"

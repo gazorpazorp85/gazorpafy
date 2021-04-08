@@ -64,14 +64,17 @@
 
     .tracks {
         color: $clr1;
-        padding: 15px 20px;
+        padding: 14px 20px;
         border-bottom: 1px solid #383838;
+        // height: 47px;
 
-        &.playlist div {
-            max-width: 31%;
-        }
-
-        & div {
+        &.playlist div,
+        &.album div,
+        &.single div,
+        &.playlist a {
+            display: flex;
+            align-items: center;
+            height: 20px;
             width: 100%;
             font-size: rem(14px);
             text-overflow: ellipsis;
@@ -84,10 +87,20 @@
             &:not(:last-child) {
                 margin-inline-end: 10px;
             }
+
+            &.track-number {
+                width: 30px;
+            }
         }
 
-        & .track-number {
-            width: 30px;
+        &.playlist div,
+        &.playlist a {
+            max-width: 31%;
+        }
+
+        &.playlist a:hover {
+            text-decoration: underline;
+            text-underline-offset: 3px;
         }
     }
 

@@ -34,10 +34,6 @@
     display: block;
 }
 
-.bold {
-    font-weight: 800;
-}
-
 .uppercase {
     text-transform: uppercase;
 }
@@ -62,14 +58,17 @@
     width: 100%;
 }
 
-.active {
-    font-weight: 800;
-}
-
 // list helpers
 
 .clean-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+// misc helpers
+
+.title {
+    color: $clr1;
+    font-family: "arimo-bold";
 }

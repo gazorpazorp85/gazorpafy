@@ -24,25 +24,29 @@
         width: 100%;
         margin-bottom: 20px;
         margin-inline-end: 20px;
+
+        .title {
+            margin-bottom: 15px;
+        }
+    }
+
+    & .fans-like-container {
+        .title {
+            margin-bottom: 15px;
+        }
     }
 
     & .details-nav-bar {
         font-family: 'arimo-bold';
-        margin-top: 20px;
+        margin: 30px 0px;
 
         & .play {
             background-color: $clr3;
             color: $clr1;
             margin-top: unset;
             border: 1px solid $clr2;
+            margin-inline-end: 15px;
         }
-    }
-
-
-    & .list-title {
-        color: $clr1;
-        font-family: "arimo-bold";
-        margin-bottom: 15px;
     }
 
     & .track-list {
@@ -92,6 +96,7 @@
         background-color: transparent;
         color: $clr1;
         border: 1px solid $clr1;
+        margin-bottom: 20px;
     }
 
     & .album-artwork {

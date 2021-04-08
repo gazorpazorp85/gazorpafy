@@ -6,7 +6,7 @@
         <div class="flex column artist-hero-left">
           <LatestRelease :album="latestRelease" />
           <div class="flex column">
-            <div class="capitalize list-title">popular</div>
+            <div class="capitalize title">popular</div>
             <div
               class="flex track-list"
               v-for="track in tracksToShow"
@@ -18,8 +18,8 @@
             </div>
           </div>
         </div>
-        <div class="flex column">
-          <div class="capitalize list-title">fans also like</div>
+        <div class="flex column fans-like-container">
+          <div class="capitalize title">fans also like</div>
           <div
             class="flex artist-container"
             v-for="artist in artistsToShow"
@@ -34,12 +34,10 @@
       <div
         v-for="key in Object.keys(albumsMap)"
         :key="key"
-        class="flex column cards-container"
+        class="flex column preview-container"
       >
-        <div class="flex column center list-header">
-          <div class="list-title">{{ formatKey(key) }}</div>
+          <div class="list-header title">{{ formatKey(key) }}</div>
           <List :items="albumsMap[key]" />
-        </div>
       </div>
     </template>
   </div>
@@ -49,7 +47,7 @@
 
 import Header from '@/cmps/Details/Header';
 import LatestRelease from '@/cmps/Details/LatestRelease';
-import List from '../cmps/ListContainer/List';
+import List from '@/cmps/List';
 
 import { spotifyService } from '@/services/spotify.service';
 
@@ -66,7 +64,8 @@ export default {
         const { token } = this.$store.getters;
         const { id } = this.$route.params;
         const artist = await spotifyService.getDetails(id, 'artists');
-        const { items } = await spotifyService.get(`${artist.href}/albums`, token);
+        const { items } = await spotifyService.get(`${artist.href}/albums?limit=50&market=il`, token);
+        // const albums = items.filter(({artists}) => artists.every(({name}) => name === artist.name));
         const { artists } = await spotifyService.get(`${artist.href}/related-artists`, token);
         const { tracks } = await spotifyService.get(`${artist.href}/top-tracks?market=us`, token);
         this.artist = { albums: items, artist, artists, tracks }
@@ -98,7 +97,7 @@ export default {
       return this.isShowMore ? 'show only 5 songs' : 'show 5 more';
     },
     latestRelease() {
-      const { albums } = JSON.parse(JSON.stringify(this.artist));
+      const albums = this.artist.albums.filter(album => album.album_group !== 'appears_on');
       const sortedAlbums = albums.sort((albumA, albumB) => {
         return albumA.release_date > albumB.release_date ? -1 : 1;
       });
@@ -114,7 +113,11 @@ export default {
       return albumsMap;
     },
     formatKey(key) {
-      return key => key.replaceAll('_', ' ');
+      return key => {
+        if (key === 'album') return 'Albums';
+        if (key === 'single') return 'Singles and EPs';
+        if (key === 'appears_on') return 'Appears On';
+      };
     }
   },
   components: {

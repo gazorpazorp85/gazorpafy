@@ -5,13 +5,14 @@
       <div class="playlist-info">
         <div class="uppercase">{{ categoryName }}</div>
         <h1>{{ playlist.name }}</h1>
-        <div class="description">{{ playlist.description }}</div>
+        <router-link :to="{ path: `/gazorpafy/artist/${playlist.artists[0].id}`}" v-if="playlist.artists">by {{ playlist.artists[0].name }}</router-link>
+        <div v-else class="description">{{ playlist.description }}</div>
         <div class="total-songs">{{ formatInfo }}</div>
         <button class="play">play</button>
       </div>
     </div>
     <div :class="`flex uppercase list-header ${playlist.type}`" v-if="playlist">
-      <div v-if="playlist.type === 'album'" class="track-number">#</div>
+      <div v-if="playlist.type === 'album' || 'single' " class="track-number">#</div>
       <div>title</div>
       <div v-if="playlist.type === 'playlist'">artist</div>
       <div v-if="playlist.type === 'playlist'">album</div>
@@ -20,22 +21,27 @@
     <template v-if="tracks && playlist">
       <div v-for="track in tracks" :key="track.id">
         <div :class="`flex tracks ${playlist.type}`">
-          <div v-if="playlist.type === 'album'" class="track-number">
+          <div v-if="playlist.type === 'album' || 'single' " class="track-number">
             {{ track.number }}
           </div>
           <div>{{ track.name }}</div>
-          <div v-if="playlist.type === 'playlist'">
+          <router-link
+            :to="{ path: `/gazorpafy/artist/${track.artists[0].id}` }"
+            v-if="playlist.type === 'playlist'"
+          >
             {{ track.artists[0].name }}
-          </div>
-          <div v-if="playlist.type === 'playlist'">{{ track.album.name }}</div>
+          </router-link>
+          <router-link :to="{ path: `/gazorpafy/album/${track.album.id}` }" v-if="playlist.type === 'playlist'">{{
+            track.album.name
+          }}</router-link>
           <div>{{ time(track.duration) }}</div>
         </div>
       </div>
-      <div v-if="playlist.type === 'album'" class="flex column copyright-container">
-        <small
-          v-for="copyright in playlist.copyrights"
-          :key="copyright.text"
-        >
+      <div
+        v-if="playlist.type === 'album'"
+        class="flex column copyright-container"
+      >
+        <small v-for="(copyright, idx) in playlist.copyrights" :key="idx">
           {{ copyrightFormat(copyright) }}
         </small>
       </div>
@@ -64,7 +70,7 @@ export default {
           this.tracks = playlist?.tracks.items.map(({ track }) => ({
             album: {
               name: track.album.name,
-              href: track.album.href
+              id: track.album.id,
             },
             artists: track.artists,
             duration: track.duration_ms,
@@ -85,6 +91,7 @@ export default {
             number: track_number,
             uri
           }));
+          console.log(this.playlist);
         }
       } catch (err) {
         console.log('failed to get info', err);
@@ -111,7 +118,9 @@ export default {
       return `${this.playlist.release_date.substring(0, 4)} • ${songsStr}, ${timeStr}`;
     },
     categoryName() {
+      console.log(this.playlist);
       if (this.playlist.type === 'album') return 'album';
+      if (this.playlist.type === 'single') return 'ep';
       if (this.playlist.type === 'playlist' && this.playlist.name.includes('Daily')) return `made for ${this.$store.getters.loggedInUser.fullName.split(' ')[0]}`;
       return 'collaborative playlist';
     },
@@ -125,9 +134,13 @@ export default {
       }
     }
   },
-
   created() {
     this.getPlaylistInfo();
+  },
+  watch: {
+    $route(to, from) {
+      if (to.params.id !== from.params.id) this.getPlaylistInfo();
+    }
   }
 }
 </script>

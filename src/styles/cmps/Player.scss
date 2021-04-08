@@ -1,12 +1,13 @@
 .player-container {
-    height: 90px;
+    height: 85px;
     grid-area: player;
-    background-color: #181818;
+    background-color: #232323;
+    // background-color: #181818;
 
     & .track-name {
         color: $clr1;
         font-size: 14px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 }
 

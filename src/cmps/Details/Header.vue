@@ -9,10 +9,10 @@
         <button class="play">play</button>
         <button>follow</button>
       </div>
-      <div class="flex">
+      <!-- <div class="flex">
         <div class="uppercase">overview</div>
         <div class="uppercase">fans also like</div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
