@@ -64,6 +64,11 @@
 
         & .material-icons {
             font-size: rem(20px);
+
+            &:hover {
+                cursor: pointer;
+                color: $clr1;
+            }
         }
 
         & :first-child {

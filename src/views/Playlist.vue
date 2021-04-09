@@ -18,17 +18,13 @@
         <button class="play">play</button>
       </div>
     </div>
-    <div v-if="playlist">
+    <Content :playlist="playlist" :tracks="tracks" v-if="playlist && tracks" />
+    <!-- <div v-if="playlist">
       <div :class="`content header ${playlist.type}`">
-        <div
-          v-if="playlist.type === 'album' || playlist.type === 'single'"
-          class="track-number"
-        >
-          #
-        </div>
+        <div v-if="isAlbum" class="track-number">#</div>
         <div>title</div>
-        <div v-if="playlist.type === 'playlist'">artist</div>
-        <div v-if="playlist.type === 'playlist'">album</div>
+        <div v-if="!isAlbum">artist</div>
+        <div v-if="!isAlbum">album</div>
         <span class="material-icons">schedule</span>
       </div>
       <div
@@ -36,40 +32,36 @@
         :key="track.id"
         :class="`content main ${playlist.type}`"
       >
-        <div
-          v-if="playlist.type === 'album' || playlist.type === 'single'"
-          class="track-number"
-        >
+        <div v-if="isAlbum" class="track-number">
           {{ track.number }}
         </div>
         <div>{{ track.name }}</div>
         <router-link
           :to="{ path: `/gazorpafy/artist/${track.artists[0].id}` }"
-          v-if="playlist.type === 'playlist'"
+          v-if="!isAlbum"
         >
           {{ track.artists[0].name }}
         </router-link>
         <router-link
           :to="{ path: `/gazorpafy/album/${track.album.id}` }"
-          v-if="playlist.type === 'playlist'"
+          v-if="!isAlbum"
         >
           {{ track.album.name }}
         </router-link>
         <div>{{ time(track.duration) }}</div>
       </div>
-      <div
-        v-if="playlist.type === 'album' || playlist.type === 'single'"
-        class="flex column copyright-container"
-      >
+      <div v-if="isAlbum" class="flex column copyright-container">
         <small v-for="(copyright, idx) in playlist.copyrights" :key="idx">
           {{ copyrightFormat(copyright) }}
         </small>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
+
+import Content from '@/cmps/Playlist/Content'
 
 import { spotifyService } from '@/services/spotify.service';
 
@@ -119,13 +111,6 @@ export default {
     }
   },
   computed: {
-    time(unit) {
-      return unit => {
-        const minutes = (Math.floor(unit / 60000)) + '';
-        const seconds = (Math.floor((unit % 60000) / 1000)) + '';
-        return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
-      }
-    },
     formatInfo() {
       const { total, items } = this.playlist.tracks;
       const totalRunningTime = items.reduce((acc, item) => {
@@ -142,16 +127,10 @@ export default {
       if (this.playlist.type === 'single') return 'ep';
       if (this.playlist.type === 'playlist' && this.playlist.name.includes('Daily')) return `made for ${this.$store.getters.loggedInUser.fullName.split(' ')[0]}`;
       return 'collaborative playlist';
-    },
-    copyrightFormat(copyright) {
-      return copyright => {
-        const symbol = copyright.type === 'C' ? '©' : '℗'
-        const formatedCopy = copyright.text.includes(`(${copyright.type})`) ?
-          copyright.text.replace(`(${copyright.type})`, symbol) :
-          `${symbol} ${copyright.text}`;
-        return formatedCopy
-      }
     }
+  },
+  components: {
+    Content
   },
   created() {
     this.getPlaylistInfo();
