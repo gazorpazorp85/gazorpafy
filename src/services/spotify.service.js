@@ -46,7 +46,7 @@ async function transferPlayback(deviceId) {
 async function getAlbumTracks(id) {
     try {
         const token = await authService.getToken();
-        const { data } = await axios.get(`${BASE_URL}/albums/${id}/tracks`, _createHeaders(token));
+        const { data } = await axios.get(`${BASE_URL}/albums/${id}/tracks?market=IL`, _createHeaders(token));
         return data;
     } catch (err) {
         console.log('failed to get album tracks', err)
@@ -56,7 +56,7 @@ async function getAlbumTracks(id) {
 async function getDetails(id, endpoint) {
     try {
         const token = await authService.getToken();
-        const { data } = await axios.get(`${BASE_URL}/${endpoint}/${id}`, _createHeaders(token));
+        const { data } = await axios.get(`${BASE_URL}/${endpoint}/${id}?market=IL`, _createHeaders(token));
         return data;
     } catch (err) {
         console.log('failed to get album tracks', err)

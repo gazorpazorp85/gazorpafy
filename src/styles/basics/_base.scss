@@ -5,9 +5,9 @@
 html,
 body {
   height: 100vh;
-  font-family: 'arimo', sans-serif;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.6), $clr6);
-  color: $clr5;
+  font-family: "arimo", sans-serif;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), $clr5);
+  color: $clr4;
 }
 
 #app {
@@ -23,8 +23,14 @@ body {
 }
 
 a {
+  color: $clr1;
   text-decoration: none;
   color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 p {

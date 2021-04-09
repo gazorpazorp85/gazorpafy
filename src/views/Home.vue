@@ -2,8 +2,8 @@
   <section class="flex column align-center center full w100 main-container">
     <h1>Welcome To Gazorpafy</h1>
     <p>
-      Gazorpafy is a spotify player made with Vue. Gazorpafy is available to
-      Spotify Premium Users only.
+      Gazorpafy is a spotify player made with Vue. 
+      Gazorpafy is available to Spotify Premium Users only.
     </p>
     <a
       class="btn login"

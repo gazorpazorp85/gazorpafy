@@ -20,7 +20,7 @@
     }
 
     & .artist-hero-left {
-        max-width: 800px;
+        max-width: 950px;
         width: 100%;
         margin-bottom: 20px;
         margin-inline-end: 20px;
@@ -54,6 +54,12 @@
         border-bottom: 1px solid #383838;
         padding-inline-end: 10px;
 
+        & img + div {
+            color: $clr4;
+            width: 20px;
+            margin-inline-start: 10px;
+        }
+
         & div {
             display: flex;
             align-items: center;
@@ -61,8 +67,13 @@
             font-size: 14px;
 
             &.track-name {
+                font-family: 'arimo-semi-bold';
                 margin-inline-start: 10px;
                 margin-inline-end: auto;
+            }
+
+            &.track-name + div {
+                color: $clr4;
             }
         }
     }

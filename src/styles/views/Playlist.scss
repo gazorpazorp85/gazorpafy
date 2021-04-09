@@ -20,6 +20,7 @@
         h1 {
             color: $clr1;
             font-size: rem(48px);
+            margin-top: 10px;
         }
 
         .description {
@@ -29,83 +30,77 @@
         .total-songs {
             font-size: rem(14px);
         }
+
+        & .artist-link-container {
+            font-size: rem(14px);
+            margin: 10px 0px;
+
+            & a {
+                color: $clr1;
+            }
+        }
     }
 
-    .list-header {
+    .content {
+        display: grid;
+        grid-template-rows: 49px;
+        grid-gap: 10px;
         align-items: center;
-        min-height: 45px;
-        width: 100%;
-        padding: 5px 20px;
         border-bottom: 1px solid #383838;
-        margin-top: 20px;
+        font-size: rem(14px);
+        padding: 0px 20px;
 
-        &.playlist div {
-            max-width: 31%;
+        &.playlist {
+            grid-template-columns: 1fr 270px 1fr 40px;
         }
 
-        & div {
-            width: 100%;
-            margin-inline-end: 10px;
+        &.album {
+            grid-template-columns: 40px 1fr 40px;
         }
 
-        & .material-icons {
-            cursor: default;
-            font-size: rem(22px);
+        &.header {
+            margin-top: 20px;
 
-            &:hover {
-                color: unset;
+            & div {
+                text-transform: uppercase;
+            }
+
+            & .material-icons {
+                cursor: default;
+                font-size: rem(18px);
+                width: 40px;
+
+                &:hover {
+                    color: unset;
+                }
             }
         }
 
-        & .track-number {
-            width: 30px;
-        }
-    }
-
-    .tracks {
-        color: $clr1;
-        padding: 14px 20px;
-        border-bottom: 1px solid #383838;
-        // height: 47px;
-
-        &.playlist div,
-        &.album div,
-        &.single div,
-        &.playlist a {
-            display: flex;
-            align-items: center;
-            height: 20px;
-            width: 100%;
-            font-size: rem(14px);
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
+        &.main {
+            font-family: "arimo-semi-bold";
+            color: $clr1;
 
             &:last-child {
-                width: 40px;
-            }
-            &:not(:last-child) {
-                margin-inline-end: 10px;
+                margin-bottom: 20px;
             }
 
-            &.track-number {
-                width: 30px;
+            & div,
+            a {
+                font-size: rem(14px);
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+
+                &:last-child {
+                    color: $clr4;
+                }
             }
-        }
-
-        &.playlist div,
-        &.playlist a {
-            max-width: 31%;
-        }
-
-        &.playlist a:hover {
-            text-decoration: underline;
-            text-underline-offset: 3px;
         }
     }
 
     .copyright-container {
         padding: 10px 15px 0px;
+        margin-bottom: 20px;
 
         & small:first-child {
             margin-bottom: 5px;

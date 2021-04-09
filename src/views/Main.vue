@@ -3,16 +3,16 @@
     <div
       v-for="playlist in userData"
       :key="playlist.id"
-      class="flex column preview-container"
+      class="flex column preview-container main-container"
     >
-      <UserDataSection :playlist="playlist" />
+      <MainContent :playlist="playlist" />
     </div>
   </div>
 </template>
 
 <script>
 
-import UserDataSection from '@/cmps/UserDataContent';
+import MainContent from '@/cmps/MainContent';
 
 export default {
   computed: {
@@ -21,7 +21,7 @@ export default {
     }
   },
   components: {
-    UserDataSection
+    MainContent
   }
 }
 </script>

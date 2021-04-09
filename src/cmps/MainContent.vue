@@ -1,6 +1,6 @@
 <template>
   <div v-if="playlist">
-    <div class="flex align-center list-header">
+    <div class="flex align-center list-header main-container">
       <div class="capitalize title">{{ playlist.title }}</div>
       <div class="navigation-container">
         <span @click="setIdx(-6)" class="material-icons"> arrow_back_ios </span>

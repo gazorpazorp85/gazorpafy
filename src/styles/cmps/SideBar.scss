@@ -1,21 +1,43 @@
 .side-bar-container {
     background-color: $clr2;
-    max-width: 210px;
+    width: 210px;
     height: 100%;
     grid-area: side-bar;
 
     & h1 {
-        color: $clr1;
+        height: 60px;
+        line-height: 60px;
+        color: $clr4;
         text-align: center;
     }
-}
 
-.img-placeholder {
-    height: 210px;
-    width: 210px;
-    margin-block-start: auto;
-}
+    a {
 
-.album-artwork {
-    margin-block-start: auto;
+        margin-bottom: 15px;
+
+        &:first-child {
+            margin-top: 15px;
+        }
+
+        div {
+            display: flex;
+            align-items: center;
+            width: 100px;
+        }
+
+        .material-icons {
+            font-size: 30px;
+        }
+
+        .material-icons + span {
+            font-family: "arimo-bold";
+            font-size: rem(14px);
+            line-height: 30px;
+            margin-inline-start: 15px;
+        }
+        &:hover {
+            color: $clr1;
+            text-decoration: none;
+        }
+    }
 }

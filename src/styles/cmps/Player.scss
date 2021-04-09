@@ -9,47 +9,45 @@
         font-size: 14px;
         margin-bottom: 8px;
     }
-}
 
-.track-info-container {
-    max-width: 210px;
-    width: 100%;
-    padding: 15px;
-    white-space: nowrap;
-}
-
-
-
-.artist-name {
-    font-size: 12px;
-}
-
-.btns-container :not(:last-child) {
-    margin-inline-end: 25px;
-}
-
-.play-btn-container {
-    border-radius: 50%;
-    border: 1px solid $clr5;
-    padding: 5px;
-
-    &:hover {
-        border: 1px solid $clr1;
-        transform: scale(1.2);
+    .track-info-container {
+        max-width: 210px;
+        width: 100%;
+        padding: 15px;
+        white-space: nowrap;
     }
-}
 
-.material-icons {
-    cursor: pointer;
-    color: $clr5;
-
-    &:hover {
-        color: $clr1;
+    .artist-name {
+        font-size: 12px;
     }
-}
 
-.progress-bar-container {
-    width: 60%;
-    font-size: 14px;
-    justify-content: space-between;
+    .btns-container :not(:last-child) {
+        margin-inline-end: 25px;
+    }
+
+    .play-btn-container {
+        border-radius: 50%;
+        border: 1px solid $clr4;
+        padding: 5px;
+
+        &:hover {
+            border: 1px solid $clr1;
+            transform: scale(1.2);
+        }
+    }
+
+    .material-icons {
+        cursor: pointer;
+        color: $clr4;
+
+        &:hover {
+            color: $clr1;
+        }
+    }
+
+    .progress-bar-container {
+        width: 60%;
+        font-size: 14px;
+        justify-content: space-between;
+    }
 }

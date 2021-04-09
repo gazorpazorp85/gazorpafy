@@ -15,6 +15,7 @@ button {
     }
 
     &.play {
+        font-family: 'arimo-bold';
         background-color: $clr3;
         color: $clr1;
         margin-top: 20px;
@@ -32,9 +33,13 @@ button {
         background-color: $clr3;
         border-radius: 23px;
         color: $clr1;
-        padding: 6px 10px;
+        padding: 10px 40px;
         font-family: "arimo-bold";
         font-size: 26px;
         margin-top: 20px;
+
+        &:hover {
+            text-decoration: none;
+        }
     }
 }

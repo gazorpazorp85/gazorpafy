@@ -1,5 +1,5 @@
 <template>
-  <div class="flex column details-container">
+  <div class="flex column details-container main-container">
     <template v-if="artist">
       <Header :artist="artist.artist" />
       <div class="flex">
@@ -9,10 +9,11 @@
             <div class="capitalize title">popular</div>
             <div
               class="flex track-list"
-              v-for="track in tracksToShow"
+              v-for="(track, idx) in tracksToShow"
               :key="track.id"
             >
               <img :src="track.album.images[2].url" alt="" />
+              <div>{{ idx + 1 }}</div>
               <div class="track-name">{{ track.name }}</div>
               <div>{{ time(track.duration_ms) }}</div>
             </div>
@@ -36,8 +37,8 @@
         :key="key"
         class="flex column preview-container"
       >
-          <div class="list-header title">{{ formatKey(key) }}</div>
-          <List :items="albumsMap[key]" />
+        <div class="list-header title">{{ formatKey(key) }}</div>
+        <List :items="albumsMap[key]" />
       </div>
     </template>
   </div>
@@ -64,10 +65,10 @@ export default {
         const { token } = this.$store.getters;
         const { id } = this.$route.params;
         const artist = await spotifyService.getDetails(id, 'artists');
-        const { items } = await spotifyService.get(`${artist.href}/albums?limit=50&market=il`, token);
+        const { items } = await spotifyService.get(`${artist.href}/albums?limit=50&market=IL`, token);
         // const albums = items.filter(({artists}) => artists.every(({name}) => name === artist.name));
         const { artists } = await spotifyService.get(`${artist.href}/related-artists`, token);
-        const { tracks } = await spotifyService.get(`${artist.href}/top-tracks?market=us`, token);
+        const { tracks } = await spotifyService.get(`${artist.href}/top-tracks?market=IL`, token);
         this.artist = { albums: items, artist, artists, tracks }
       } catch (err) {
         console.log('failed to get info', err);
@@ -130,6 +131,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>
