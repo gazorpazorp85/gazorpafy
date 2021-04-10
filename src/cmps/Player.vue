@@ -16,8 +16,15 @@
         </div>
         <span class="material-icons" @click="nextTrack"> skip_next </span>
       </div>
-      <div class="flex progress-bar-container">
-        <div :style="{ margin: '0 10px' }">{{ time(position) }}</div>
+      <div class="flex align-center progress-bar-container">
+        <div>{{ time(position) }}</div>
+        <input
+          class="slider"
+          type="range"
+          min="0"
+          :max="trackDuration"
+          v-model="position"
+        />
         <div>{{ time(trackDuration) }}</div>
       </div>
     </div>
@@ -32,7 +39,7 @@ export default {
   data() {
     return {
       playerCheckInterval: null,
-      position: null,
+      position: 0,
       positionInterval: null,
       trackDuration: null,
     }
@@ -42,11 +49,11 @@ export default {
       if (window.Spotify) {
         this.$store.dispatch('init', this.$store.getters.token);
         clearInterval(this.playerCheckInterval);
+        this.updateTrackInfo();
       }
     },
     play() {
       const { player, playerState } = this.$store.getters;
-      this.trackDuration = playerState.duration;
       player.togglePlay();
       if (this.positionInterval) clearInterval(this.positionInterval);
       if (!playerState.playing) {
@@ -64,6 +71,11 @@ export default {
     nextTrack() {
       this.$store.getters.player.nextTrack();
     },
+    updateTrackInfo() {
+      if (!this.$store.getters.playerState) return;
+      const { duration } = this.$store.getters.playerState;
+      this.trackDuration = duration;
+    }
   },
   computed: {
     playButtonTxt() {
@@ -83,5 +95,10 @@ export default {
   created() {
     this.playerCheckInterval = setInterval(this.checkForPlayer, 1000);
   },
+  watch: {
+    playerState(to, from) {
+      this.updateTrackInfo();
+    }
+  }
 }
 </script>
