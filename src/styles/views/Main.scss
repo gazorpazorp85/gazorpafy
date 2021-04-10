@@ -52,10 +52,32 @@
             margin-top: 4px;
         }
 
+        .preview-img-container {
+            position: relative;
+        }
+
         & img {
             height: 200px;
             width: 200px;
             object-fit: cover;
+        }
+
+        & .preview-play-container {
+            position: absolute;
+            height: 200px;
+            width: 200px;
+            background-color: #000000bd;
+            top: 0;
+
+            .play-btn-container {
+                border-radius: 50%;
+                border: 1px solid $clr4;
+                padding: 5px;
+
+                & .material-icons {
+                    font-size: rem(50px);
+                }
+            }
         }
     }
 
@@ -64,11 +86,6 @@
 
         & .material-icons {
             font-size: rem(20px);
-
-            &:hover {
-                cursor: pointer;
-                color: $clr1;
-            }
         }
 
         & :first-child {

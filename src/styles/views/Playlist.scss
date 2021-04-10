@@ -43,12 +43,13 @@
 
     .content {
         display: grid;
+        position: relative;
         grid-template-rows: 49px;
         grid-gap: 10px;
         align-items: center;
         border-bottom: 1px solid #383838;
         font-size: rem(14px);
-        padding: 0px 20px;
+        padding: 0px 20px 0px 50px;
 
         &.playlist {
             grid-template-columns: 1fr 270px 1fr 40px;
@@ -66,11 +67,11 @@
             }
 
             & .material-icons {
-                cursor: default;
                 font-size: rem(18px);
                 width: 40px;
 
                 &:hover {
+                    cursor: default;
                     color: unset;
                 }
             }
@@ -90,9 +91,37 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
+                height: 100%;
+                line-height: 49px;
 
                 &:last-child {
                     color: $clr4;
+                }
+            }
+
+            &:hover {
+                background-color: #232323;
+            }
+
+            .play-btn-container {
+                height: 30px;
+                position: absolute;
+                background-color: #232323;
+                border-radius: 50%;
+                border: 1px solid $clr4;
+                padding: 5px;
+                margin-inline-start: 10px;
+
+                & .material-icons {
+                    font-size: rem(18px);
+                }
+            }
+
+            &.album {
+                .play-btn-container {
+                    width: 30px;
+                    position: relative;
+                    margin-inline-start: unset;
                 }
             }
         }

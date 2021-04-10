@@ -15,47 +15,10 @@
         </div>
         <div v-else class="description">{{ playlist.description }}</div>
         <div class="total-songs">{{ formatInfo }}</div>
-        <button class="play">play</button>
+        <button @click="play" class="play">{{ playButtonTxt }}</button>
       </div>
     </div>
     <Content :playlist="playlist" :tracks="tracks" v-if="playlist && tracks" />
-    <!-- <div v-if="playlist">
-      <div :class="`content header ${playlist.type}`">
-        <div v-if="isAlbum" class="track-number">#</div>
-        <div>title</div>
-        <div v-if="!isAlbum">artist</div>
-        <div v-if="!isAlbum">album</div>
-        <span class="material-icons">schedule</span>
-      </div>
-      <div
-        v-for="track in tracks"
-        :key="track.id"
-        :class="`content main ${playlist.type}`"
-      >
-        <div v-if="isAlbum" class="track-number">
-          {{ track.number }}
-        </div>
-        <div>{{ track.name }}</div>
-        <router-link
-          :to="{ path: `/gazorpafy/artist/${track.artists[0].id}` }"
-          v-if="!isAlbum"
-        >
-          {{ track.artists[0].name }}
-        </router-link>
-        <router-link
-          :to="{ path: `/gazorpafy/album/${track.album.id}` }"
-          v-if="!isAlbum"
-        >
-          {{ track.album.name }}
-        </router-link>
-        <div>{{ time(track.duration) }}</div>
-      </div>
-      <div v-if="isAlbum" class="flex column copyright-container">
-        <small v-for="(copyright, idx) in playlist.copyrights" :key="idx">
-          {{ copyrightFormat(copyright) }}
-        </small>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -80,7 +43,7 @@ export default {
         if (this.$route.path.includes('playlist')) {
           const playlist = await spotifyService.getDetails(id, 'playlists');
           this.playlist = { ...playlist, type: 'playlist' };
-          this.tracks = playlist?.tracks.items.map(({ track }) => ({
+          this.tracks = playlist.tracks.items.map(({ track }) => ({
             album: {
               name: track.album.name,
               id: track.album.id,
@@ -95,7 +58,7 @@ export default {
         } else {
           const playlist = await spotifyService.getDetails(id, 'albums');
           this.playlist = { ...playlist, type: playlist.album_type };
-          this.tracks = playlist?.tracks.items.map(({ duration_ms, explicit, href, id, name, track_number, uri }) => ({
+          this.tracks = playlist.tracks.items.map(({ duration_ms, explicit, href, id, name, track_number, uri }) => ({
             duration: duration_ms,
             explicit,
             href,
@@ -108,6 +71,9 @@ export default {
       } catch (err) {
         console.log('failed to get info', err);
       }
+    },
+    play() {
+      console.log(this.playlist.uri);
     }
   },
   computed: {
@@ -123,11 +89,16 @@ export default {
       return `${this.playlist.release_date.substring(0, 4)} • ${songsStr}, ${timeStr}`;
     },
     categoryName() {
-      if (this.playlist.type === 'album') return 'album';
-      if (this.playlist.type === 'single') return 'ep';
-      if (this.playlist.type === 'playlist' && this.playlist.name.includes('Daily')) return `made for ${this.$store.getters.loggedInUser.fullName.split(' ')[0]}`;
+      const { name, type } = this.playlist;
+      if (type === 'album') return 'album';
+      if (type === 'single') return 'ep';
+      const firstName = this.$store.getters.loggedInUser.fullName.split(' ')[0];
+      if (type === 'playlist' && name.includes('Daily')) return `made for ${firstName}`;
       return 'collaborative playlist';
-    }
+    },
+    playButtonTxt() {
+      return this.$store.getters.playerState?.playing ? 'pause' : 'play';
+    },
   },
   components: {
     Content
@@ -137,7 +108,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      if (to.params.id !== from.params.id) this.getPlaylistInfo();
+      this.getPlaylistInfo();
     }
   }
 }

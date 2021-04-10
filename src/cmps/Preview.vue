@@ -1,6 +1,23 @@
 <template>
   <div class="flex column preview">
-    <img v-if="item.images.length > 0" :src="item.images[0].url" />
+    <div
+      class="preview-img-container"
+      @mouseenter="isShownHandler(true)"
+      @mouseleave="isShownHandler(false)"
+    >
+      <img v-if="item.images.length > 0" :src="item.images[0].url" />
+      <div
+        v-if="isShown"
+        class="flex center align-center preview-play-container"
+      >
+        <div
+          class="flex center align-center play-btn-container"
+          @click="play"
+        >
+          <span class="material-icons"> play_arrow </span>
+        </div>
+      </div>
+    </div>
     <router-link
       :to="{ name: `${item.type}`, params: getParams }"
       :class="`title ${item.type}`"
@@ -19,6 +36,19 @@ export default {
     item: {
       type: Object,
       required: true
+    }
+  },
+  data() {
+    return {
+      isShown: false
+    }
+  },
+  methods: {
+    isShownHandler(value) {
+      this.isShown = value;
+    },
+    play() {
+      console.log(this.item.uri);
     }
   },
   computed: {
