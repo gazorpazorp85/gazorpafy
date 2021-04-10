@@ -44,7 +44,7 @@
     .content {
         display: grid;
         position: relative;
-        grid-template-rows: 49px;
+        grid-template-rows: 40px;
         grid-gap: 10px;
         align-items: center;
         border-bottom: 1px solid #383838;
@@ -81,22 +81,34 @@
             font-family: "arimo-semi-bold";
             color: $clr1;
 
+            &.play {
+                color: $clr3;
+
+                & :last-child {
+                    color: $clr3;
+                }
+            }
+
             &:last-child {
                 margin-bottom: 20px;
             }
 
             & div,
             a {
-                font-size: rem(14px);
+                font-size: rem(13.5px);
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
                 height: 100%;
-                line-height: 49px;
 
                 &:last-child {
                     color: $clr4;
+                    line-height: 40px;
                 }
+            }
+
+            a {
+                line-height: 40px;
             }
 
             &:hover {
@@ -105,21 +117,51 @@
 
             .play-btn-container {
                 height: 30px;
+                width: 30px;
                 position: absolute;
-                background-color: #232323;
-                border-radius: 50%;
-                border: 1px solid $clr4;
-                padding: 5px;
                 margin-inline-start: 10px;
 
                 & .material-icons {
+                    height: 100%;
+                    width: 100%;
+                    padding: 5px;
+                    border-radius: 50%;
+                    border: 1px solid $clr4;
                     font-size: rem(18px);
+
+                    &.play {
+                        border: unset;
+                        border-radius: unset;
+                        color: $clr1;
+
+                        &:hover {
+                            border-radius: 50%;
+                            border: 1px solid $clr4;
+                        }
+                    }
+                }
+            }
+
+            .track-name {
+                justify-content: space-between;
+
+                * {
+                    display: block;
+                }
+                & :nth-child(2) {
+                    color: #3b3b3b;
+                    text-transform: uppercase;
+                    border: 1px solid #3b3b3b;
+                    padding: 3px 5px;
+                    font-size: rem(10px);
+                    border-radius: 3px;
+                    margin-inline-end: 5px;
                 }
             }
 
             &.album {
                 .play-btn-container {
-                    width: 30px;
+                    // width: 30px;
                     position: relative;
                     margin-inline-start: unset;
                 }

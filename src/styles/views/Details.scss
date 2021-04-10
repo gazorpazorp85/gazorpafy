@@ -2,7 +2,6 @@
     padding: 80px 20px 0;
 
     & .artist-info {
-
         & .artist-img {
             border-radius: 50%;
             width: 150px;
@@ -31,13 +30,25 @@
     }
 
     & .fans-like-container {
+        & .artist-icon {
+            background-color: #333;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-inline-end: 10px;
+
+            & .material-icons {
+                color: $clr4;
+            }
+        }
+
         .title {
             margin-bottom: 15px;
         }
     }
 
     & .details-nav-bar {
-        font-family: 'arimo-bold';
+        font-family: "arimo-bold";
         margin: 30px 0px;
 
         & .play {
@@ -67,7 +78,7 @@
             font-size: 14px;
 
             &.track-name {
-                font-family: 'arimo-semi-bold';
+                font-family: "arimo-semi-bold";
                 margin-inline-start: 10px;
                 margin-inline-end: auto;
             }
@@ -80,7 +91,7 @@
 
     & .artist-container {
         align-items: center;
-        
+
         &:not(:last-child) {
             margin-bottom: 10px;
         }
@@ -102,7 +113,7 @@
     }
 
     button {
-        font-family: 'arimo-bold';
+        font-family: "arimo-bold";
         letter-spacing: 1.5px;
         background-color: transparent;
         color: $clr1;

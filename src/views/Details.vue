@@ -26,7 +26,10 @@
             v-for="artist in artistsToShow"
             :key="artist.id"
           >
-            <img :src="artist.images[2].url" alt="" />
+            <img v-if="artist.images[2]" :src="artist.images[2].url" alt="" />
+            <div v-else class="flex center align-center artist-icon">
+              <span class="material-icons"> person_outline </span>
+            </div>
             <div>{{ artist.name }}</div>
           </div>
         </div>
@@ -51,11 +54,13 @@ import LatestRelease from '@/cmps/Details/LatestRelease';
 import List from '@/cmps/List';
 
 import { spotifyService } from '@/services/spotify.service';
+import { utilService } from '@/services/util.service';
 
 export default {
   data() {
     return {
       artist: null,
+      idx: 0,
       isShowMore: false
     }
   },
@@ -80,6 +85,7 @@ export default {
   },
   computed: {
     artistsToShow() {
+      console.log(JSON.parse(JSON.stringify(this.artist.artists)).slice(0, idx))
       const idx = this.isShowMore ? 10 : 4;
       return JSON.parse(JSON.stringify(this.artist.artists)).slice(0, idx);
     },
@@ -88,11 +94,7 @@ export default {
       return JSON.parse(JSON.stringify(this.artist.tracks)).slice(0, idx);
     },
     time(unit) {
-      return unit => {
-        const minutes = (Math.floor(unit / 60000)) + '';
-        const seconds = (Math.floor((unit % 60000) / 1000)) + '';
-        return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
-      }
+      return unit => utilService.time(unit);
     },
     buttonTxt() {
       return this.isShowMore ? 'show only 5 songs' : 'show 5 more';

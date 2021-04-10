@@ -43,6 +43,18 @@ async function transferPlayback(deviceId) {
     }
 }
 
+async function seek(time, deviceId) {
+    try {
+        const token = await authService.getToken();
+        const { data } = await axios.put(`${BASE_URL}/me/player/seek?position_ms=${time}`, { "device_ids": [deviceId], "play": false }, _createHeaders(token));
+        return data;
+    } catch (err) {
+        console.log('failed to transfer playback', err)
+    }
+}
+
+// https://api.spotify.com/v1/me/player/seek
+
 async function getAlbumTracks(id) {
     try {
         const token = await authService.getToken();
@@ -88,5 +100,6 @@ export const spotifyService = {
     transferPlayback,
     getAlbumTracks,
     get,
-    getDetails
+    getDetails,
+    seek
 }

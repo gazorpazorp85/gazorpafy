@@ -38,10 +38,11 @@ export default {
   methods: {
     async getPlaylistInfo() {
       try {
-        console.log('params', this.$route.params);
+        // console.log('params', this.$route.params);
         const { id } = this.$route.params;
         if (this.$route.path.includes('playlist')) {
           const playlist = await spotifyService.getDetails(id, 'playlists');
+          // console.log('playlist', playlist);
           this.playlist = { ...playlist, type: 'playlist' };
           this.tracks = playlist.tracks.items.map(({ track }) => ({
             album: {
@@ -50,6 +51,7 @@ export default {
             },
             artists: track.artists,
             duration: track.duration_ms,
+            explicit: track.explicit,
             href: track.href,
             id: track.id,
             name: track.name,
@@ -72,21 +74,33 @@ export default {
         console.log('failed to get info', err);
       }
     },
-    play() {
-      console.log(this.playlist.uri);
+    async play() {
+      console.log(this.playlist);
+      try {
+        const { deviceId, token } = this.$store.getters;
+        // console.log(deviceId, token);
+        // console.log(this.playlist.tracks.items);
+        const uris = this.playlist.tracks.items.map(item => item.track.uri);
+        // console.log(uris);
+        await spotifyService.playTrack(uris, deviceId, token);
+      } catch (err) {
+        console.log('failed to play track', err);
+      }
     }
   },
   computed: {
     formatInfo() {
-      const { total, items } = this.playlist.tracks;
+      const { release_date, tracks, type } = this.playlist;
+      const { total, items } = tracks;
       const totalRunningTime = items.reduce((acc, item) => {
-        return acc += this.playlist.type === 'playlist' ? item.track.duration_ms : item.duration_ms
+        const unit = type === 'playlist' ? item.track.duration_ms : item.duration_ms;
+        return acc += unit;
       }, 0);
       const minutes = (Math.floor(totalRunningTime / 60000));
       const timeStr = minutes > 60 ? `${Math.floor(minutes / 60)} hr ${Math.floor(minutes % 60)} min` : `${minutes} min`;
       const songsStr = total > 1 ? `${total} songs` : `${total} song`;
-      if (this.playlist.type === 'playlist') return `${songsStr}, ${timeStr}`;
-      return `${this.playlist.release_date.substring(0, 4)} • ${songsStr}, ${timeStr}`;
+      if (type === 'playlist') return `${songsStr}, ${timeStr}`;
+      return `${release_date.substring(0, 4)} • ${songsStr}, ${timeStr}`;
     },
     categoryName() {
       const { name, type } = this.playlist;

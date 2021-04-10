@@ -1,15 +1,17 @@
 <template>
   <div
-    :class="`content main ${type}`"
+    :class="`content main ${type} ${isPlaying ? 'play' : ''}`"
     @mouseenter="isShownHandler(true)"
     @mouseleave="isShownHandler(false)"
   >
     <div
       class="flex center align-center play-btn-container"
-      v-if="isShown && !isAlbum"
+      v-if="!isAlbum && (isShown || isPlaying)"
       @click="play"
     >
-      <span class="material-icons"> play_arrow </span>
+      <span class="material-icons" :class="`${isPlaying ? 'play' : ''}`">
+        {{ playButtonTxt }}
+      </span>
     </div>
     <div v-if="!isShown && isAlbum" class="track-number">
       {{ track.number }}
@@ -21,7 +23,10 @@
     >
       <span class="material-icons"> play_arrow </span>
     </div>
-    <div>{{ track.name }}</div>
+    <div class="flex center align-center track-name">
+      <span>{{ track.name }}</span>
+      <span v-if="track.explicit">explicit</span>
+    </div>
     <router-link
       :to="{ path: `/gazorpafy/artist/${artist.id}` }"
       v-if="!isAlbum"
@@ -40,6 +45,10 @@
 
 
 <script>
+
+import { spotifyService } from '@/services/spotify.service';
+import { utilService } from '@/services/util.service';
+
 export default {
   props: {
     track: {
@@ -61,26 +70,40 @@ export default {
       this.isShown = value;
     },
     play() {
-      console.log(this.track.uri);
+      console.log(this.$store.getters.playerState);
+      console.log(this.$store.getters.player);
+      const { player, playerState } = this.$store.getters;
+      if (playerState.id !== this.track.id) return this.$emit('play', this.track.id);
+      player.togglePlay();
     }
   },
   computed: {
     time() {
-      const minutes = (Math.floor(this.track.duration / 60000)) + '';
-      const seconds = (Math.floor((this.track.duration % 60000) / 1000)) + '';
-      return `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
+      return utilService.time(this.track.duration);
     },
     isAlbum() {
-      return this.type === 'album' || this.type === 'single'
+      return this.type === 'album' || this.type === 'single';
     },
     artist() {
       return this.track.artists[0];
-    }
+    },
+    isPlaying() {
+      const id = this.$store.getters.playerState?.id;
+      return this.track.id === id;
+    },
+    playButtonTxt() {
+      if (this.isShown) {
+        const { playerState } = this.$store.getters;
+        return (this.isPlaying && playerState.playing) ? 'pause' : 'play_arrow';
+      } else {
+        return 'volume_up_outlined';
+      }
+    },
   },
   watch: {
     $route(to, from) {
       this.isShown = false;
-    }
+    },
   }
 
 }
