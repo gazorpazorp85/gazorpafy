@@ -148,6 +148,11 @@
                 * {
                     display: block;
                 }
+
+                & :first-child {
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
                 & :nth-child(2) {
                     color: #3b3b3b;
                     text-transform: uppercase;

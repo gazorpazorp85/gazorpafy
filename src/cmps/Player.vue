@@ -27,8 +27,8 @@
             class="slider"
             type="range"
             min="0"
-            :max="trackDuration"
-            v-model="position"
+            :max="duration"
+            v-model="playerPosition"
             @click="seek"
           />
           <div
@@ -36,7 +36,7 @@
             class="progress-bar"
           ></div>
         </div>
-        <div>{{ time(trackDuration) }}</div>
+        <div>{{ time(duration) }}</div>
       </div>
     </div>
   </div>
@@ -50,11 +50,8 @@ export default {
   name: 'player',
   data() {
     return {
-      playerCheckInterval: null,
-      position: 0,
-      seekPosition: 0,
-      positionInterval: null,
-      trackDuration: null,
+      playerInterval: null,
+      playerPosition: 0,
       isHovered: false
     }
   },
@@ -62,30 +59,21 @@ export default {
     checkForPlayer() {
       if (window.Spotify) {
         this.$store.dispatch('init', this.$store.getters.token);
-        clearInterval(this.playerCheckInterval);
+        clearInterval(this.playerInterval);
         this.updateTrackInfo();
       }
     },
     play() {
-      const { player, playerState } = this.$store.getters;
-      console.log('player', player);
-      player.togglePlay();
-      if (this.positionInterval) clearInterval(this.positionInterval);
-      if (!playerState.playing) {
-        this.positionInterval = setInterval(() => {
-          this.position += 1000;
-        }, 1000);
-      } else {
-        clearInterval(this.positionInterval);
-      }
+      this.$store.dispatch('play');
     },
     async seek() {
-      try {
-        const { deviceId } = this.$store.getters;
-        await spotifyService.seek(this.position, deviceId);
-      } catch (err) {
-        console.log('couldn\'t seek', err)
-      }
+      this.$store.dispatch('seek', this.playerPosition);
+      // try {
+      //   const { deviceId } = this.$store.getters;
+      //   await spotifyService.transferPlayback(deviceId, `/seek?position_ms=${this.playerPosition}`);
+      // } catch (err) {
+      //   console.log('couldn\'t seek', err)
+      // }
     },
     previousTrack() {
       this.$store.getters.player.previousTrack();
@@ -94,10 +82,8 @@ export default {
       this.$store.getters.player.nextTrack();
     },
     updateTrackInfo() {
-      if (!this.$store.getters.playerState) return;
-      const { duration, position } = this.$store.getters.playerState;
-      this.trackDuration = duration;
-      this.position = position;
+      if (!this.position) return;
+      this.playerPosition = this.position;
     },
     hover(value) {
       this.isHovered = value;
@@ -105,27 +91,36 @@ export default {
   },
   computed: {
     playButtonTxt() {
-      return this.$store.getters.playerState?.playing ? 'pause' : 'play_arrow';
+      return this.playerState?.playing ? 'pause' : 'play_arrow';
     },
     time(unit) {
+      if (!unit) return '00:00';
       return unit => utilService.time(unit);
     },
     playerState() {
       return this.$store.getters.playerState;
     },
     progressBar() {
-      return Math.floor((this.position / this.trackDuration) * 100) || 0;
+      if (!this.playerState) return 0;
+      return ((this.position / this.duration) * 100).toFixed(4);
     },
     hoverHandler() {
       return this.isHovered ? '#1db954' : '#b3b3b3';
+    },
+    position() {
+      return this.$store.getters.position;
+    },
+    duration() {
+      return this.$store.getters.duration;
     }
   },
   created() {
-    this.playerCheckInterval = setInterval(this.checkForPlayer, 1000);
+    this.playerInterval = setInterval(this.checkForPlayer, 1000);
   },
   watch: {
-    playerState(to, from) {
+    'position': function (to, from) {
       this.updateTrackInfo();
+      console.log(window.Spotify)
     }
   }
 }

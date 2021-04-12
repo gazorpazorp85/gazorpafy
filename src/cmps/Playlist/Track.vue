@@ -70,8 +70,6 @@ export default {
       this.isShown = value;
     },
     play() {
-      console.log(this.$store.getters.playerState);
-      console.log(this.$store.getters.player);
       const { player, playerState } = this.$store.getters;
       if (playerState.id !== this.track.id) return this.$emit('play', this.track.id);
       player.togglePlay();

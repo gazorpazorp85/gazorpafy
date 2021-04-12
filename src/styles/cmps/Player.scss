@@ -32,7 +32,9 @@
         border-radius: 50%;
         border: 1px solid $clr4;
         padding: 5px;
-
+        .material-icons {
+            color: $clr1;
+        }
         &:hover {
             border: 1px solid $clr1;
             transform: scale(1.2);
@@ -63,28 +65,18 @@
             position: relative;
 
             .slider {
-                // overflow: hidden;
                 appearance: none;
                 -webkit-appearance: none;
                 position: absolute;
                 background-color: transparent;
-                // border-radius: 4px;
-                // margin: 0px 20px;
                 width: 100%;
-                top: -2px;
                 height: 100%;
+                margin: unset;
+                z-index: 2;
 
                 &:focus {
                     outline: none;
                 }
-
-                // &:hover::-webkit-slider-runnable-track {
-                //     -webkit-appearance: none;
-                //     appearance: none;
-                //     background: $clr3;
-                //     border-radius: 4px;
-                //     height: 5px;
-                // }
 
                 &::-webkit-slider-thumb {
                     -webkit-appearance: none;
@@ -95,27 +87,20 @@
                     color: $clr1;
                     background: $clr1;
                     border-radius: 50%;
-                    // cursor: pointer;
                     opacity: 0;
                     z-index: 2;
                 }
 
                 &:hover::-webkit-slider-thumb {
                     opacity: 1;
-                    top: -1px;
                 }
             }
 
             .progress-bar {
                 position: absolute;
-                // z-index: 1;
-                // background-color: $clr4;
                 border-radius: 4px;
                 height: 5px;
-
-                // &:hover {
-                //     background-color: $clr3;
-                // }
+                z-index: 1;
             }
         }
     }

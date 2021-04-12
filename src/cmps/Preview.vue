@@ -10,10 +10,7 @@
         v-if="isShown"
         class="flex center align-center preview-play-container"
       >
-        <div
-          class="flex center align-center play-btn-container"
-          @click="play"
-        >
+        <div class="flex center align-center play-btn-container" @click="play">
           <span class="material-icons"> play_arrow </span>
         </div>
       </div>
@@ -31,6 +28,9 @@
 </template>
 
 <script>
+
+import { spotifyService } from '../services/spotify.service';
+
 export default {
   props: {
     item: {
@@ -47,8 +47,24 @@ export default {
     isShownHandler(value) {
       this.isShown = value;
     },
-    play() {
-      console.log(this.item.uri);
+    async play() {
+      console.log(this.item)
+      try {
+        const { deviceId, token } = this.$store.getters;
+        if (this.item.type === 'playlist') {
+          console.log('deviceId', deviceId);
+          console.log('token', token);
+          console.log('this.item.uri', this.item.uri);
+          // await spotifyService.playTrack([this.item.uri], deviceId, token);
+        } else {
+          const { tracks } = await spotifyService.get(`${this.item.href}/top-tracks?market=IL`, token);
+          const uris = tracks.map(track => track.uri);
+          await spotifyService.playTrack(uris, deviceId, token);
+          // console.log(uris)
+        }
+      } catch (err) {
+        console.log('failed to play track', err);
+      }
     }
   },
   computed: {

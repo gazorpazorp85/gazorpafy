@@ -75,13 +75,9 @@ export default {
       }
     },
     async play() {
-      console.log(this.playlist);
       try {
         const { deviceId, token } = this.$store.getters;
-        // console.log(deviceId, token);
-        // console.log(this.playlist.tracks.items);
         const uris = this.playlist.tracks.items.map(item => item.track.uri);
-        // console.log(uris);
         await spotifyService.playTrack(uris, deviceId, token);
       } catch (err) {
         console.log('failed to play track', err);
