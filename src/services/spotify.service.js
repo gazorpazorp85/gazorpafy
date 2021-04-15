@@ -33,17 +33,7 @@ async function playTrack(spotify_uri, deviceId, token) {
     }
 }
 
-async function getPlayerState() {
-    try {
-        const token = await authService.getToken();
-        const { data } = await axios.get(`${BASE_URL}/me/player/`, _createHeaders(token));
-        return data;
-    } catch (err) {
-        console.log('failed to play track', err)
-    }
-}
-
-async function transferPlayback(deviceId, endpoint = '') {
+async function updatePlayer(deviceId, endpoint = '') {
     try {
         const token = await authService.getToken();
         const { data } = await axios.put(`${BASE_URL}/me/player${endpoint}`, { "device_ids": [deviceId], "play": false }, _createHeaders(token));
@@ -95,9 +85,8 @@ export const spotifyService = {
     getData,
     query,
     playTrack,
-    transferPlayback,
+    updatePlayer,
     getAlbumTracks,
     get,
     getDetails,
-    getPlayerState
 }

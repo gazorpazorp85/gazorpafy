@@ -8,7 +8,11 @@ function createEventHandlers(player, dispatch, commit) {
 
     // Playback status updates
 
-    player.on('player_state_changed', newState => dispatch({ type: 'updateState', newState }));
+    player.on('player_state_changed', newState => {
+        dispatch({ type: 'updateState', newState });
+        dispatch('deviceState');
+        console.log('player_state_changed');
+    });
 
     // Ready
     player.on('ready', data => {
@@ -22,7 +26,7 @@ function createEventHandlers(player, dispatch, commit) {
 
 async function _transferPlayback(device_id) {
     try {
-        await spotifyService.transferPlayback(device_id);
+        await spotifyService.updatePlayer(device_id);
     } catch (err) {
         console.log('cannot transfer playback', err);
     }

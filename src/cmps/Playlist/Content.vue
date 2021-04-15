@@ -13,19 +13,13 @@
       :type="playlist.type"
       :track="track"
     />
-    <div v-if="isAlbum" class="flex column copyright-container">
-      <Copyright
-        v-for="(copyright, idx) in playlist.copyrights"
-        :key="idx"
-        :copyright="copyright"
-      />
-    </div>
+    <Copyrights :copyrights="playlist.copyrights" v-if="isAlbum"/>
   </div>
 </template>
 
 <script>
 
-import Copyright from './Copyright';
+import Copyrights from './Copyrights';
 import Track from './Track';
 
 import { spotifyService } from '@/services/spotify.service';
@@ -48,7 +42,7 @@ export default {
     },
   },
   components: {
-    Copyright,
+    Copyrights,
     Track
   }
 }

@@ -6,6 +6,13 @@
     </div>
     <div class="flex column full center align-center">
       <div class="flex align-center btns-container">
+        <span
+          class="material-icons"
+          :class="shuffleState ? 'active' : ''"
+          @click="shuffle"
+        >
+          shuffle
+        </span>
         <span class="material-icons" @click="previousTrack">
           skip_previous
         </span>
@@ -15,16 +22,26 @@
           </span>
         </div>
         <span class="material-icons" @click="nextTrack"> skip_next </span>
+        <span
+          class="material-icons"
+          :class="repeatState !== 'off' ? 'active' : ''"
+          @click="repeat"
+        >
+          repeat
+        </span>
       </div>
       <ProgressBar />
     </div>
+    <Volume />
   </div>
 </template>
 
 <script>
 import ProgressBar from './Player/ProgressBar';
+import Volume from './Player/Volume';
 
 import { socketService } from '@/services/socket.service';
+import { spotifyService } from '@/services/spotify.service';
 
 export default {
   name: 'player',
@@ -49,6 +66,28 @@ export default {
     },
     nextTrack() {
       this.$store.getters.player.nextTrack();
+    },
+    async shuffle() {
+      try {
+        const { deviceId } = this.$store.getters;
+        await spotifyService.updatePlayer(deviceId, `/shuffle?state=${!this.shuffleState}`);
+      } catch (err) {
+        console.log('failed to update shuffle state', err);
+      }
+    },
+    async repeat() {
+      try {
+        console.log('repeatState', this.repeatState);
+        const repeatStates = ['off', 'context', 'track'];
+        const idx = repeatStates.findIndex(state => state === this.repeatState);
+        const nextState = repeatStates[idx === repeatStates.length - 1 ? 0 : idx + 1];
+        console.log('nextState', nextState);
+        const { deviceId } = this.$store.getters;
+        console.log(`/repeat?state=${nextState}`);
+        await spotifyService.updatePlayer(deviceId, `/repeat?state=${nextState}`);
+      } catch (err) {
+        console.log('failed to update shuffle state', err);
+      }
     }
   },
   computed: {
@@ -72,10 +111,17 @@ export default {
     },
     playerPositionProp() {
       return this.playerPosition;
+    },
+    shuffleState() {
+      return this.$store.getters.shuffleState;
+    },
+    repeatState() {
+      return this.$store.getters.repeatState;
     }
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    Volume
   },
   created() {
     this.playerInterval = setInterval(this.checkForPlayer, 1000);

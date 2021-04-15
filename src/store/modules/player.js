@@ -6,6 +6,7 @@ export const playerStore = {
     player: null,
     playerState: null,
     deviceId: null,
+    deviceState: null
   },
   getters: {
     player({ player }) {
@@ -30,6 +31,15 @@ export const playerStore = {
       const trackName = currentTrack?.name;
       const id = currentTrack?.id;
       return { artistName, albumImage, id, trackName };
+    },
+    shuffleState({deviceState}) {
+      return deviceState?.shuffle_state;
+    },
+    repeatState({deviceState}) {
+      return deviceState?.repeat_state;
+    },
+    volume({ deviceState }) {
+      return deviceState?.device?.volume_percent;
     }
   },
   mutations: {
@@ -45,9 +55,12 @@ export const playerStore = {
     updateState(state, { currentState }) {
       state.playerState = currentState;
     },
+    deviceState(state, { deviceState }) {
+      state.deviceState = deviceState;
+    }
   },
   actions: {
-    init({ commit, dispatch }, token) {
+    async init({ commit, dispatch }, token) {
       try {
         const player = new window.Spotify.Player({
           name: "Gazorpafy Player",
@@ -58,6 +71,15 @@ export const playerStore = {
         player.connect();
       } catch (err) {
         console.log('failed to initialize player', err);
+      }
+    },
+    async deviceState({ commit }) {
+      try {
+        const deviceState = await spotifyService.getData('me/player');
+        console.log('deviceState', deviceState);
+        commit({ type: 'deviceState', deviceState });
+      } catch (err) {
+        console.log('failed to get device state', err);
       }
     },
     async updateState({ commit }, { newState }) {
@@ -71,7 +93,7 @@ export const playerStore = {
     async seek({ getters, dispatch }, newPosition) {
       const { deviceId } = getters;
       try {
-        await spotifyService.transferPlayback(deviceId, `/seek?position_ms=${newPosition}`);
+        await spotifyService.updatePlayer(deviceId, `/seek?position_ms=${newPosition}`);
         dispatch({ type: 'updateState' });
       } catch (err) {
         console.log('couldn\'t seek', err)

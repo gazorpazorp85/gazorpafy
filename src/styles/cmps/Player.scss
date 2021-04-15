@@ -44,6 +44,17 @@
     .material-icons {
         font-size: rem(20px);
         color: $clr4;
+
+        &.active {
+            color: $clr3;
+            &::after {
+                content: '.';
+                position: relative;
+                bottom: -2px;
+                right: 18px;
+                font-weight: 800;
+            }
+        }
     }
 
     .progress-bar-container {
