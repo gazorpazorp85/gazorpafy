@@ -13,15 +13,15 @@
         {{ playButtonTxt }}
       </span>
     </div>
-    <div v-if="!isShown && isAlbum" class="track-number">
+    <div v-if="isAlbum && !isShown && !isPlaying" class="flex align-center track-number">
       {{ track.number }}
     </div>
     <div
       class="flex center align-center play-btn-container"
-      v-if="isShown && isAlbum"
+      v-if="isAlbum && (isShown || isPlaying)"
       @click="play"
     >
-      <span class="material-icons"> play_arrow </span>
+      <span class="material-icons" :class="`${isPlaying ? 'play' : ''}`"> {{ playButtonTxt }} </span>
     </div>
     <div class="flex center align-center track-name">
       <span>{{ track.name }}</span>
@@ -47,6 +47,7 @@
 <script>
 
 import { spotifyService } from '@/services/spotify.service';
+import { socketService } from '@/services/socket.service';
 import { utilService } from '@/services/util.service';
 
 export default {
@@ -69,10 +70,22 @@ export default {
     isShownHandler(value) {
       this.isShown = value;
     },
-    play() {
+    async play() {
       const { player, playerState } = this.$store.getters;
-      if (playerState.id !== this.track.id) return this.$emit('play', this.track.id);
-      player.togglePlay();
+      const { id } = playerState?.track_window.current_track;
+      if (id === this.track.id) {
+        this.$store.dispatch('play');
+      } else {
+        try {
+          const { deviceId, token } = this.$store.getters;
+          await spotifyService.playTrack([this.track.uri], deviceId, token);
+        } catch (err) {
+          console.log('failed to play track', err);
+        }
+      }
+      this.$store.dispatch('updateState', { newState: null });
+      socketService.emit('change');
+      setTimeout(() => socketService.emit('play'), 200);
     }
   },
   computed: {
@@ -86,13 +99,13 @@ export default {
       return this.track.artists[0];
     },
     isPlaying() {
-      const id = this.$store.getters.playerState?.id;
+      const id = this.$store.getters.songInfo?.id;
       return this.track.id === id;
     },
     playButtonTxt() {
       if (this.isShown) {
         const { playerState } = this.$store.getters;
-        return (this.isPlaying && playerState.playing) ? 'pause' : 'play_arrow';
+        return (this.isPlaying && !playerState.paused) ? 'pause' : 'play_arrow';
       } else {
         return 'volume_up_outlined';
       }

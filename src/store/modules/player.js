@@ -6,7 +6,6 @@ export const playerStore = {
     player: null,
     playerState: null,
     deviceId: null,
-    position: 0
   },
   getters: {
     player({ player }) {
@@ -18,12 +17,20 @@ export const playerStore = {
     deviceId({ deviceId }) {
       return deviceId;
     },
-    position({ position }) {
-      return position;
+    position({ playerState }) {
+      return playerState?.position;
     },
     duration({ playerState }) {
       return playerState?.duration;
     },
+    songInfo({ playerState }) {
+      const currentTrack = playerState?.track_window?.current_track;
+      const albumImage = currentTrack?.album.images[0];
+      const artistName = currentTrack?.artists.map(artist => artist.name).join(', ');
+      const trackName = currentTrack?.name;
+      const id = currentTrack?.id;
+      return { artistName, albumImage, id, trackName };
+    }
   },
   mutations: {
     player(state, { player }) {
@@ -36,57 +43,36 @@ export const playerStore = {
       state.position = newPosition;
     },
     updateState(state, { currentState }) {
-      console.log('player currentState: ', currentState);
-      if (currentState) {
-        const { current_track: currentTrack } = currentState.track_window;
-        const { duration, position } = currentState;
-        const albumImage = currentTrack.album.images[0];
-        const albumName = currentTrack.album.name;
-        const artistName = currentTrack.artists.map(artist => artist.name).join(', ');
-        const trackName = currentTrack.name;
-        const playing = !currentState.paused;
-        const { id } = currentTrack;
-        state.playerState = {
-          albumImage,
-          albumName,
-          artistName,
-          duration,
-          id,
-          playing,
-          position,
-          trackName,
-        };
-        state.position = position;
-      }
+      state.playerState = currentState;
     },
   },
   actions: {
     init({ commit, dispatch }, token) {
-      const player = new window.Spotify.Player({
-        name: "Gazorpafy Player",
-        getOAuthToken: cb => { cb(token); },
-      });
-      commit({ type: 'player', player });
-      // const cb = (updatedState) => 
-      playerService.createEventHandlers(player, dispatch, commit);
-      player.connect();
+      try {
+        const player = new window.Spotify.Player({
+          name: "Gazorpafy Player",
+          getOAuthToken: cb => { cb(token); },
+        });
+        commit({ type: 'player', player });
+        playerService.createEventHandlers(player, dispatch, commit);
+        player.connect();
+      } catch (err) {
+        console.log('failed to initialize player', err);
+      }
     },
-    async updateState({ commit }) {
-      const currentState = await this.getters.player.getCurrentState();
+    async updateState({ commit }, { newState }) {
+      const currentState = newState ?? await this.getters.player.getCurrentState();
       commit({ type: 'updateState', currentState })
     },
-    play({ commit, getters }) {
-      const { player, playerState, position } = getters;
-      playerService.play(playerState, position, (newPosition) => {
-        commit({ type: 'position', newPosition });
-      });
+    play({ getters }) {
+      const { player } = getters;
       player.togglePlay();
     },
-    async seek({ commit, getters }, newPosition) {
+    async seek({ getters, dispatch }, newPosition) {
       const { deviceId } = getters;
       try {
-        commit({ type: 'position', newPosition });
         await spotifyService.transferPlayback(deviceId, `/seek?position_ms=${newPosition}`);
+        dispatch({ type: 'updateState' });
       } catch (err) {
         console.log('couldn\'t seek', err)
       }

@@ -1,7 +1,5 @@
 import { spotifyService } from './spotify.service';
 
-let gInterval = null;
-
 function createEventHandlers(player, dispatch, commit) {
     player.on('initialization_error', e => console.error(e));
     player.on('authentication_error', e => console.error(e));
@@ -20,10 +18,6 @@ function createEventHandlers(player, dispatch, commit) {
         commit({ type: 'deviceId', deviceId: device_id });
         _transferPlayback(device_id);
     });
-
-    // player.on('gazorpa_play', _ => {
-    //     console.log('listening play');
-    // })
 }
 
 async function _transferPlayback(device_id) {
@@ -34,20 +28,6 @@ async function _transferPlayback(device_id) {
     }
 }
 
-function play(playerState, position, cb) {
-    if (gInterval) clearInterval(gInterval);
-    let newPosition = position;
-    if (!playerState.playing) {
-        gInterval = setInterval(() => {
-            newPosition = parseInt(newPosition) + 1000;
-            cb(newPosition);
-        }, 1000);
-    } else {
-        clearInterval(gInterval);
-    }
-}
-
 export const playerService = {
     createEventHandlers,
-    play
 }

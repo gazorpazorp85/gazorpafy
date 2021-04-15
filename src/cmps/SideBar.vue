@@ -14,7 +14,7 @@
         </div>
       </router-link>
     </div>
-    <img v-if="playerState" :src="playerState.albumImage.url" alt="" />
+    <img v-if="songInfo.albumImage" :src="songInfo.albumImage.url" alt="" />
   </div>
 </template>
 
@@ -30,12 +30,9 @@ export default {
     }
   },
   computed: {
-    playerState() {
-      return this.$store.getters.playerState;
+    songInfo() {
+      return this.$store.getters.songInfo;
     },
   }
 }
 </script>
-
-<style>
-</style>

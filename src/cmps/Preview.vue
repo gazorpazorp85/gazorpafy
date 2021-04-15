@@ -29,7 +29,8 @@
 
 <script>
 
-import { spotifyService } from '../services/spotify.service';
+import { spotifyService } from '@/services/spotify.service';
+import { socketService } from '@/services/socket.service';
 
 export default {
   props: {
@@ -48,20 +49,20 @@ export default {
       this.isShown = value;
     },
     async play() {
-      console.log(this.item)
       try {
         const { deviceId, token } = this.$store.getters;
+        let uris = [];
         if (this.item.type === 'playlist') {
-          console.log('deviceId', deviceId);
-          console.log('token', token);
-          console.log('this.item.uri', this.item.uri);
-          // await spotifyService.playTrack([this.item.uri], deviceId, token);
+          const playlist = await spotifyService.getDetails(this.item.id, 'playlists');
+          uris = playlist.tracks.items.map(({ track }) => track.uri);
         } else {
           const { tracks } = await spotifyService.get(`${this.item.href}/top-tracks?market=IL`, token);
-          const uris = tracks.map(track => track.uri);
-          await spotifyService.playTrack(uris, deviceId, token);
-          // console.log(uris)
+          uris = tracks.map(track => track.uri);
         }
+        await spotifyService.playTrack(uris, deviceId, token);
+        this.$store.dispatch('updateState', { newState: null });
+        socketService.emit('change');
+        setTimeout(() => socketService.emit('play'), 200);
       } catch (err) {
         console.log('failed to play track', err);
       }
