@@ -1,5 +1,8 @@
 <template>
   <div class="flex column full user-info">
+    <div class="main-container w100">
+      <h1>home</h1>
+    </div>
     <div
       v-for="playlist in userData"
       :key="playlist.id"

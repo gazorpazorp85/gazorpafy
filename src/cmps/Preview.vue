@@ -18,10 +18,13 @@
     <router-link
       :to="{ name: `${item.type}`, params: getParams }"
       :class="`title ${item.type}`"
+      active-class="active"
+      exact
       >{{ item.name }}
     </router-link>
     <div v-if="item.description" class="description">{{ longTxt }}</div>
-    <div class="album-date" v-if="item.release_date">
+    <div class="album-date" v-if="isNewRelease">{{item.artists[0].name}}</div>
+    <div class="album-date" v-else-if="item.release_date">
       {{ item.release_date.substring(0, 4) }}
     </div>
   </div>
@@ -37,6 +40,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    isNewRelease: {
+      type: Boolean,
+      required: false
     }
   },
   data() {

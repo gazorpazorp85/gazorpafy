@@ -59,12 +59,14 @@ export default new Vuex.Store({
     async getUserData({ commit }) {
       const endpoints = [
         { endpoint: 'me/playlists', title: 'my playlists', type: 'playlist' },
-        { endpoint: 'me/top/artists', title: 'my top artists', type: 'artists' }
+        { endpoint: 'me/top/artists', title: 'my top artists', type: 'artists' },
+        // { endpoint: 'me/top/tracks', title: 'my top tracks', type: 'tracks' }
       ];
       for (let i = 0; i < endpoints.length; i++) {
         const { endpoint, title, type } = endpoints[i];
         try {
           const { items } = await spotifyService.getData(endpoint);
+          console.log('items getUserData', items);
           const data = { id: `p${i}`, title, items, type };
           commit({ type: 'userData', data });
         } catch (err) {

@@ -12,6 +12,7 @@
 @import "basics/typography";
 
 // cmps
+@import "cmps/BrowsePreview.scss";
 @import "cmps/NavBar.scss";
 @import "cmps/Player.scss";
 @import "cmps/Search.scss";
@@ -21,6 +22,7 @@
 @import "cmps/Player/Volume.scss";
 
 // pages
+@import "views/Browse.scss";
 @import "views/Details.scss";
 @import "views/Home.scss";
 @import "views/GazorpafyApp.scss";

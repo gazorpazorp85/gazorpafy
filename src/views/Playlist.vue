@@ -1,24 +1,30 @@
 <template>
-  <div class="playlist-container main-container">
-    <div class="flex" v-if="playlist">
-      <img :src="playlist.images[0].url" alt="" />
-      <div class="playlist-info">
-        <div class="uppercase">{{ categoryName }}</div>
-        <h1>{{ playlist.name }}</h1>
-        <div v-if="playlist.artists" class="artist-link-container">
-          By
-          <router-link
-            :to="{ path: `/gazorpafy/artist/${playlist.artists[0].id}` }"
-          >
-            {{ playlist.artists[0].name }}
-          </router-link>
+  <div class="playlist-container">
+    <div class="main-container">
+      <div class="flex" v-if="playlist">
+        <img :src="playlist.images[0].url" alt="" />
+        <div class="playlist-info">
+          <div class="uppercase">{{ categoryName }}</div>
+          <h1>{{ playlist.name }}</h1>
+          <div v-if="playlist.artists" class="artist-link-container">
+            By
+            <router-link
+              :to="{ path: `/gazorpafy/artist/${playlist.artists[0].id}` }"
+            >
+              {{ playlist.artists[0].name }}
+            </router-link>
+          </div>
+          <div v-else class="description">{{ playlist.description }}</div>
+          <div class="total-songs">{{ formatInfo }}</div>
+          <button @click="play" class="play">{{ playButtonTxt }}</button>
         </div>
-        <div v-else class="description">{{ playlist.description }}</div>
-        <div class="total-songs">{{ formatInfo }}</div>
-        <button @click="play" class="play">{{ playButtonTxt }}</button>
       </div>
+      <Content
+        :playlist="playlist"
+        :tracks="tracks"
+        v-if="playlist && tracks"
+      />
     </div>
-    <Content :playlist="playlist" :tracks="tracks" v-if="playlist && tracks" />
   </div>
 </template>
 

@@ -37,6 +37,10 @@
         }
         &:hover {
             text-decoration: none;
+            color: $clr1;
+        }
+        &.router-link-active {
+            color: $clr1;
         }
     }
 }

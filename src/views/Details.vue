@@ -1,49 +1,51 @@
 <template>
-  <div class="flex column details-container main-container">
-    <template v-if="artist">
-      <Header :artist="artist.artist" />
-      <div class="flex">
-        <div class="flex column artist-hero-left">
-          <LatestRelease :album="latestRelease" />
-          <div class="flex column">
-            <div class="capitalize title">popular</div>
+  <div class="flex column details-container">
+    <div class="main-container w100">
+      <template v-if="artist">
+        <Header :artist="artist.artist" />
+        <div class="flex">
+          <div class="flex column artist-hero-left">
+            <LatestRelease :album="latestRelease" />
+            <div class="flex column">
+              <div class="capitalize title">popular</div>
+              <div
+                class="flex track-list"
+                v-for="(track, idx) in tracksToShow"
+                :key="track.id"
+              >
+                <img :src="track.album.images[2].url" alt="" />
+                <div>{{ idx + 1 }}</div>
+                <div class="track-name">{{ track.name }}</div>
+                <div>{{ time(track.duration_ms) }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex column fans-like-container">
+            <div class="capitalize title">fans also like</div>
             <div
-              class="flex track-list"
-              v-for="(track, idx) in tracksToShow"
-              :key="track.id"
+              class="flex artist-container"
+              v-for="artist in artistsToShow"
+              :key="artist.id"
             >
-              <img :src="track.album.images[2].url" alt="" />
-              <div>{{ idx + 1 }}</div>
-              <div class="track-name">{{ track.name }}</div>
-              <div>{{ time(track.duration_ms) }}</div>
+              <img v-if="artist.images[2]" :src="artist.images[2].url" alt="" />
+              <div v-else class="flex center align-center artist-icon">
+                <span class="material-icons"> person_outline </span>
+              </div>
+              <div>{{ artist.name }}</div>
             </div>
           </div>
         </div>
-        <div class="flex column fans-like-container">
-          <div class="capitalize title">fans also like</div>
-          <div
-            class="flex artist-container"
-            v-for="artist in artistsToShow"
-            :key="artist.id"
-          >
-            <img v-if="artist.images[2]" :src="artist.images[2].url" alt="" />
-            <div v-else class="flex center align-center artist-icon">
-              <span class="material-icons"> person_outline </span>
-            </div>
-            <div>{{ artist.name }}</div>
-          </div>
+        <button @click="toggleShowMore">{{ buttonTxt }}</button>
+        <div
+          v-for="key in Object.keys(albumsMap)"
+          :key="key"
+          class="flex column preview-container"
+        >
+          <div class="list-header title">{{ formatKey(key) }}</div>
+          <List :items="albumsMap[key]" type="album" />
         </div>
-      </div>
-      <button @click="toggleShowMore">{{ buttonTxt }}</button>
-      <div
-        v-for="key in Object.keys(albumsMap)"
-        :key="key"
-        class="flex column preview-container"
-      >
-        <div class="list-header title">{{ formatKey(key) }}</div>
-        <List :items="albumsMap[key]" />
-      </div>
-    </template>
+      </template>
+    </div>
   </div>
 </template>
 

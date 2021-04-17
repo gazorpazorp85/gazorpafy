@@ -7,6 +7,7 @@
         :key="link.id"
         :to="link.href"
         class="flex center"
+        
       >
         <div>
           <span class="material-icons"> {{ link.iconName }} </span>
@@ -23,7 +24,7 @@ export default {
   data() {
     return {
       links: [
-        { id: 'l1', href: '/gazorpafy', iconName: 'home', txt: 'Home' },
+        { id: 'l1', href: '/gazorpafy/home', iconName: 'home', txt: 'Home' },
         { id: 'l2', href: '/gazorpafy/browse', iconName: 'inventory', txt: 'Browse' },
         { id: 'l3', href: '/gazorpafy/radio', iconName: 'sensors', txt: 'Radio' },
       ]
@@ -33,6 +34,9 @@ export default {
     songInfo() {
       return this.$store.getters.songInfo;
     },
-  }
+  },
+  created() {
+    console.log('route', this.$route);
+  },
 }
 </script>

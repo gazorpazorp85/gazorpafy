@@ -1,6 +1,6 @@
 <template>
   <div v-if="playlist">
-    <div class="flex align-center list-header main-container">
+    <div class="flex align-center list-header">
       <div class="capitalize title">{{ playlist.title }}</div>
       <div class="navigation-container">
         <span @click="setIdx(-6)" class="material-icons"> arrow_back_ios </span>
@@ -9,7 +9,7 @@
         </span>
       </div>
     </div>
-    <List :items="itemsToShow" />
+    <List :items="itemsToShow" :type="playlist.type"></List>
   </div>
 </template>
 
@@ -17,6 +17,7 @@
 <script>
 
 import List from './List';
+import Preview from './Preview';
 
 export default {
   props: {
@@ -44,7 +45,8 @@ export default {
     }
   },
   components: {
-    List
+    List,
+    Preview
   }
 }
 </script>

@@ -15,18 +15,21 @@ function createEventHandlers(player, dispatch, commit) {
     });
 
     // Ready
-    player.on('ready', data => {
-        const { device_id } = data;
+    player.on('ready', ({ device_id }) => {
         console.log('Let the music play on!');
         console.log('Connected with Device ID', device_id);
         commit({ type: 'deviceId', deviceId: device_id });
         _transferPlayback(device_id);
     });
+
+    player.on('not_ready', ({ device_id }) => {
+        console.log('Device ID is not ready for playback', device_id);
+    });
 }
 
-async function _transferPlayback(device_id) {
+async function _transferPlayback(deviceId) {
     try {
-        await spotifyService.updatePlayer(device_id);
+        await spotifyService.updatePlayer(deviceId);
     } catch (err) {
         console.log('cannot transfer playback', err);
     }
