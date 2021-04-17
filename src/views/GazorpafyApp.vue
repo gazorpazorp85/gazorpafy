@@ -2,7 +2,7 @@
   <section class="gazorpafy-container">
     <SideBar />
     <div class="main-content-container">
-      <NavBar @search="search" />
+      <NavBar />
       <router-view />
     </div>
     <Player />
@@ -18,13 +18,6 @@ import { spotifyService } from '@/services/spotify.service';
 
 export default {
   name: 'GazorpafyApp',
-  methods: {
-    async search(query) {
-      const { token } = this.$store.getters;
-      const results = await spotifyService.query(query, token);
-      console.log('query results', results);
-    }
-  },
   created() {
     this.$store.dispatch('getUserData');
   },

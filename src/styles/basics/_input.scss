@@ -1,4 +1,4 @@
-input[type="text"] {
+.searchInput {
     height: 40px;
     width: 100%;
     resize: none;
@@ -12,7 +12,9 @@ input[type="text"] {
     padding: 6px 48px;
 }
 
-
+.searchInput:focus {
+    outline: none;
+}
 
 .search-bar-icon {
     background-image: url(~@/assets/icons/search.svg);

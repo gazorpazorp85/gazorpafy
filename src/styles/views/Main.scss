@@ -49,6 +49,7 @@
     }
 
     & .preview {
+        flex-direction: column;
         letter-spacing: normal;
 
         & .title {
@@ -65,7 +66,7 @@
                 font-size: rem(14px);
             }
         }
-        & .album-date {
+        & .album-info {
             margin-top: 5px;
             font-size: rem(14px);
         }

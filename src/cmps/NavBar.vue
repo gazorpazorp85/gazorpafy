@@ -9,7 +9,7 @@
           arrow_forward_ios
         </span>
       </div>
-      <Search @search="search" />
+      <SearchInput @search="search" />
       <UserIcon v-if="loggedInUser" :user="loggedInUser" />
     </div>
   </div>
@@ -17,13 +17,13 @@
 
 <script>
 
-import Search from '@/cmps/Search';
+import SearchInput from '@/cmps/SearchInput';
 import UserIcon from '@/cmps/UserIcon';
 
 export default {
   methods: {
     search(query) {
-      this.$emit('search', query);
+      this.$router.push({ name: 'search', query: { q: query} })
     },
     changeRoute(diff) {
       this.$router.go(diff);
@@ -35,7 +35,7 @@ export default {
     }
   },
   components: {
-    Search,
+    SearchInput,
     UserIcon
   },
   created() {

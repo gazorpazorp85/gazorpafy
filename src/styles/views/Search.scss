@@ -1,0 +1,90 @@
+.search-container {
+    padding-top: 60px;
+
+    & .category-title {
+        max-width: 1300px;
+        text-transform: capitalize;
+        color: $clr1;
+        font-family: "arimo-bold";
+        font-size: rem(16px);
+        padding: 5px 0px;
+        border-bottom: 1px solid #383838;
+    }
+
+    & .search-preview-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        & .preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-auto-rows: 150px;
+            gap: 10px;
+            padding-top: 20px;
+
+            & img {
+                width: 50px;
+                height: 50px;
+            }
+
+            & .preview {
+                // flex-direction: row;
+                letter-spacing: normal;
+        
+                & .title {
+                    color: $clr1;
+                    font-family: "arimo-bold";
+                    font-size: rem(16px);
+                    line-height: 24px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    margin-top: 16px;
+        
+                    &.album {
+                        font-size: rem(14px);
+                    }
+                }
+                & .album-info {
+                    margin-top: 5px;
+                    font-size: rem(14px);
+                }
+        
+                & .description {
+                    font-size: rem(14px);
+                    line-height: 19px;
+                    white-space: normal;
+                    margin-top: 4px;
+                }
+        
+                .preview-img-container {
+                    position: relative;
+                }
+        
+                & img {
+                    height: 200px;
+                    width: 200px;
+                    object-fit: cover;
+                }
+        
+                & .preview-play-container {
+                    position: absolute;
+                    height: 200px;
+                    width: 200px;
+                    background-color: #000000bd;
+                    top: 0;
+        
+                    .play-btn-container {
+                        border-radius: 50%;
+                        border: 1px solid $clr4;
+                        padding: 5px;
+        
+                        & .material-icons {
+                            font-size: rem(50px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

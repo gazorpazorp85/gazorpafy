@@ -1,6 +1,7 @@
 <template>
   <div class="flex search-bar-container">
     <input
+      class="searchInput"
       type="text"
       v-model="query"
       placeholder="Artists, songs, or podcasts"

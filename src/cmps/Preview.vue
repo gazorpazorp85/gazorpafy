@@ -1,11 +1,21 @@
 <template>
-  <div class="flex column preview">
+  <div class="flex preview">
     <div
       class="preview-img-container"
       @mouseenter="isShownHandler(true)"
       @mouseleave="isShownHandler(false)"
     >
-      <img v-if="item.images.length > 0" :src="item.images[0].url" />
+      <img v-if="imageToRender" :src="imageToRender" />
+      <div v-else :style="{ height: '200px', width: '200px' }">
+        <div class="flex center align-center artist-icon">
+          <span
+            class="flex center align-center material-icons"
+            :style="{ height: '200px', width: '200px', fontSize: '200px' }"
+          >
+            person_outline
+          </span>
+        </div>
+      </div>
       <div
         v-if="isShown"
         class="flex center align-center preview-play-container"
@@ -16,15 +26,18 @@
       </div>
     </div>
     <router-link
+      v-if="item.type !== 'track'"
       :to="{ name: `${item.type}`, params: getParams }"
       :class="`title ${item.type}`"
-      active-class="active"
-      exact
-      >{{ item.name }}
+    >
+      {{ item.name }}
     </router-link>
+    <div v-else :class="`title ${item.type}`">
+      {{ item.name }}
+    </div>
     <div v-if="item.description" class="description">{{ longTxt }}</div>
-    <div class="album-date" v-if="isNewRelease">{{item.artists[0].name}}</div>
-    <div class="album-date" v-else-if="item.release_date">
+    <div class="album-info" v-if="isNewRelease">{{ item.artists[0].name }}</div>
+    <div class="album-info" v-else-if="item.release_date">
       {{ item.release_date.substring(0, 4) }}
     </div>
   </div>
@@ -82,6 +95,10 @@ export default {
     },
     getParams() {
       return this.item.type === 'album' ? { id: this.item.id, group: this.item.album_group, type: this.item.album_type } : { id: this.item.id };
+    },
+    imageToRender() {
+      return this.item.images?.length > 0 ? this.item.images[0].url :
+        this.item.album ? this.item.album.images[0].url : null;
     }
   }
 }

@@ -14,10 +14,15 @@ async function getData(endpoint) {
     }
 }
 
-async function query(query, token) {
+async function query(query, token = authService.getToken()) {
     try {
-        const { data } = await axios.get(`${BASE_URL}/search?q=${query}&type=album,artist`, _createHeaders(token));
-        const res = [...data.albums.items, ...data.artists.items];
+        const { data } = await axios.get(`${BASE_URL}/search?q=${query}&type=album,artist,playlist,track&market=IL&limit=50`, _createHeaders(token));
+        const res = {
+            albums: data.albums.items,
+            artists: data.artists.items,
+            playlists: data.playlists.items,
+            tracks: data.tracks.items
+        };
         return res;
     } catch (err) {
         console.log('failed to search', err)
