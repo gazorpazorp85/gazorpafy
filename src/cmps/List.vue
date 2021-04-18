@@ -4,7 +4,10 @@
     :class="!previewToRender ? 'browse-grid' : ''"
     v-if="items && items.length > 0"
   >
-    <template v-if="previewToRender">
+    <template v-if="$route.name === 'search'">
+      <SearchPreview v-for="item in items" :key="item.id" :item="item" />
+    </template>
+    <template v-else-if="previewToRender">
       <Preview
         v-for="item in items"
         :key="item.id"
@@ -22,6 +25,7 @@
 
 import BrowsePreview from './Browse/BrowsePreview';
 import Preview from './Preview';
+import SearchPreview from './Search/SearchPreview';
 
 export default {
   props: {
@@ -43,9 +47,13 @@ export default {
       return this.type !== 'browseCategory';
     }
   },
+  created() {
+    console.log('route', this.$route.name === 'search');
+  },
   components: {
     BrowsePreview,
-    Preview
+    Preview,
+    SearchPreview
   }
 }
 </script>

@@ -32,7 +32,7 @@ import { socketService } from '@/services/socket.service';
 export default {
   data() {
     return {
-      barPosition: 0,
+      barPosition: null,
       barInterval: null,
       isHovered: false,
       isPlaying: false
@@ -46,6 +46,7 @@ export default {
       this.$store.dispatch('seek', this.barPosition);
     },
     progressHandler() {
+      if (!this.duration && !this.position) return;
       this.isPlaying = true;
       if (!this.barInterval && this.isPlaying) {
         this.barInterval = setInterval(() => {
@@ -55,6 +56,7 @@ export default {
         clearInterval(this.barInterval);
         this.barInterval = null;
         this.isPlaying = false;
+        if (this.barPosition >= this.duration) this.barPosition = null;
       }
     },
     resetPlayer() {

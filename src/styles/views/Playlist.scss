@@ -46,7 +46,7 @@
         grid-template-rows: 40px;
         grid-gap: 10px;
         align-items: center;
-        border-bottom: 1px solid #383838;
+        border-bottom: 1px solid $clr6;
         font-size: rem(14px);
         padding: 0px 20px 0px 50px;
 
@@ -54,8 +54,20 @@
             grid-template-columns: 1fr 270px 1fr 40px;
         }
 
+        &.unavailable {
+            color: $clr6 !important;
+
+            & :hover {
+                color: $clr6 !important;
+            }
+
+            & :last-child {
+                color: $clr6 !important;
+            }
+        }
+
         &.album,
-        &.single  {
+        &.single {
             grid-template-columns: 40px 1fr 40px;
         }
 

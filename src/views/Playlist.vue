@@ -60,17 +60,19 @@ export default {
             explicit: track.explicit,
             href: track.href,
             id: track.id,
+            isPlayable: track.is_playable,
             name: track.name,
             uri: track.uri
           }));
         } else {
           const playlist = await spotifyService.getDetails(id, 'albums');
           this.playlist = { ...playlist, type: playlist.album_type };
-          this.tracks = playlist.tracks.items.map(({ duration_ms, explicit, href, id, name, track_number, uri }) => ({
+          this.tracks = playlist.tracks.items.map(({ duration_ms, explicit, href, id, is_playable, name, track_number, uri }) => ({
             duration: duration_ms,
             explicit,
             href,
             id,
+            isPlayable: is_playable,
             name,
             number: track_number,
             uri

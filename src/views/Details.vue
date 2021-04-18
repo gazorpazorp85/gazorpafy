@@ -72,11 +72,11 @@ export default {
         const { token } = this.$store.getters;
         const { id } = this.$route.params;
         const artist = await spotifyService.getDetails(id, 'artists');
-        const { items } = await spotifyService.get(`${artist.href}/albums?limit=50&market=IL`, token);
-        // const albums = items.filter(({artists}) => artists.every(({name}) => name === artist.name));
+        const { items } = await spotifyService.get(`${artist.href}/albums?limit=50`, token);
+        const albums = items.filter(item => item.available_markets.includes('IL'));
         const { artists } = await spotifyService.get(`${artist.href}/related-artists`, token);
         const { tracks } = await spotifyService.get(`${artist.href}/top-tracks?market=IL`, token);
-        this.artist = { albums: items, artist, artists, tracks }
+        this.artist = { albums, artist, artists, tracks }
       } catch (err) {
         console.log('failed to get info', err);
       }

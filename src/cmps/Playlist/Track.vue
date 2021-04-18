@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="`content main ${type} ${isPlaying ? 'play' : ''}`"
+    :class="`content main ${type} ${isPlaying ? 'play' : ''} ${!track.isPlayable ? 'unavailable' : ''}`"
     @mouseenter="isShownHandler(true)"
     @mouseleave="isShownHandler(false)"
   >
@@ -68,9 +68,11 @@ export default {
   },
   methods: {
     isShownHandler(value) {
+      if (!this.track.isPlayable) return;
       this.isShown = value;
     },
     async play() {
+      if (!this.track.isPlayable) return;
       const { player, playerState } = this.$store.getters;
       const { id } = playerState?.track_window.current_track;
       if (id === this.track.id) {
