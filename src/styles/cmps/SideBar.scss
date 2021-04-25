@@ -12,7 +12,6 @@
     }
 
     a {
-
         margin-bottom: 15px;
 
         &:first-child {
@@ -27,6 +26,16 @@
 
         .material-icons {
             font-size: 30px;
+
+            &.inventory {
+                font-size: 26px;
+                margin: 0 2px;
+            }
+
+            &.sensors {
+                font-size: 28px;
+                margin: 0 1px;
+            }
         }
 
         .material-icons + span {

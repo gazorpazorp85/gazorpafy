@@ -23,6 +23,9 @@
     </router-link>
     <div v-if="item.description" class="description">{{ longTxt }}</div>
     <div class="album-info" v-if="isNewRelease">{{ item.artists[0].name }}</div>
+    <div class="album-info" v-else-if="item.type === 'album'">
+      {{ item.artists[0].name }}
+    </div>
     <div class="album-info" v-else-if="item.release_date">
       {{ item.release_date.substring(0, 4) }}
     </div>
@@ -31,8 +34,8 @@
 
 <script>
 
+import { playerService } from '@/services/player.service';
 import { spotifyService } from '@/services/spotify.service';
-import { socketService } from '@/services/socket.service';
 
 export default {
   props: {
@@ -56,21 +59,18 @@ export default {
     },
     async play() {
       try {
-        const { deviceId, token } = this.$store.getters;
         let uris = [];
         if (this.item.type === 'playlist') {
           const playlist = await spotifyService.getDetails(this.item.id, 'playlists');
           uris = playlist.tracks.items.map(({ track }) => track.uri);
         } else {
+          const { token } = this.$store.getters;
           const { tracks } = await spotifyService.get(`${this.item.href}/top-tracks?market=IL`, token);
           uris = tracks.map(track => track.uri);
         }
-        await spotifyService.playTrack(uris, deviceId, token);
-        this.$store.dispatch('updateState', { newState: null });
-        socketService.emit('change');
-        setTimeout(() => socketService.emit('play'), 200);
+        playerService.playHandler(this.$store.dispatch, this.$store.getters, uris);
       } catch (err) {
-        console.log('failed to play track', err);
+        console.log('can\'t play track from preview', err);
       }
     }
   },

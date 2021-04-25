@@ -1,6 +1,8 @@
 <template>
   <div
-    :class="`content main ${type} ${isPlaying ? 'play' : ''} ${!track.isPlayable ? 'unavailable' : ''}`"
+    :class="`content main ${type} ${isPlaying ? 'play' : ''} ${
+      !track.isPlayable ? 'unavailable' : ''
+    }`"
     @mouseenter="isShownHandler(true)"
     @mouseleave="isShownHandler(false)"
   >
@@ -13,7 +15,10 @@
         {{ playButtonTxt }}
       </span>
     </div>
-    <div v-if="isAlbum && !isShown && !isPlaying" class="flex align-center track-number">
+    <div
+      v-if="isAlbum && !isShown && !isPlaying"
+      class="flex align-center track-number"
+    >
       {{ track.number }}
     </div>
     <div
@@ -21,7 +26,9 @@
       v-if="isAlbum && (isShown || isPlaying)"
       @click="play"
     >
-      <span class="material-icons" :class="`${isPlaying ? 'play' : ''}`"> {{ playButtonTxt }} </span>
+      <span class="material-icons" :class="`${isPlaying ? 'play' : ''}`">
+        {{ playButtonTxt }}
+      </span>
     </div>
     <div class="flex center align-center track-name">
       <span>{{ track.name }}</span>
@@ -46,8 +53,8 @@
 
 <script>
 
+import { playerService } from '@/services/player.service';
 import { spotifyService } from '@/services/spotify.service';
-import { socketService } from '@/services/socket.service';
 import { utilService } from '@/services/util.service';
 
 export default {
@@ -71,23 +78,13 @@ export default {
       if (!this.track.isPlayable) return;
       this.isShown = value;
     },
-    async play() {
+    play() {
       if (!this.track.isPlayable) return;
-      const { player, playerState } = this.$store.getters;
+      const { getters, dispatch } = this.$store;
+      const { playerState } = getters;
       const { id } = playerState?.track_window.current_track;
-      if (id === this.track.id) {
-        this.$store.dispatch('play');
-      } else {
-        try {
-          const { deviceId, token } = this.$store.getters;
-          await spotifyService.playTrack([this.track.uri], deviceId, token);
-        } catch (err) {
-          console.log('failed to play track', err);
-        }
-      }
-      this.$store.dispatch('updateState', { newState: null });
-      socketService.emit('change');
-      setTimeout(() => socketService.emit('play'), 200);
+      if (id === this.track.id) return dispatch('play');
+      playerService.playHandler(dispatch, getters, [this.track.uri]);
     }
   },
   computed: {

@@ -1,3 +1,4 @@
+import { socketService } from './socket.service';
 import { spotifyService } from './spotify.service';
 
 function createEventHandlers(player, dispatch, commit) {
@@ -11,7 +12,7 @@ function createEventHandlers(player, dispatch, commit) {
     player.on('player_state_changed', newState => {
         dispatch({ type: 'updateState', newState });
         dispatch('deviceState');
-        console.log('player_state_changed');
+        // console.log('player_state_changed');
     });
 
     // Ready
@@ -35,6 +36,18 @@ async function _transferPlayback(deviceId) {
     }
 }
 
+async function playHandler(dispatch, getters, uris) {
+    try {
+        const { deviceId, token } = getters;
+        await spotifyService.playTrack(uris, deviceId, token);
+        dispatch('updateState', { newState: null });
+        socketService.emit('change');
+    } catch (err) {
+        console.log('can\'t play track', err);
+    }
+}
+
 export const playerService = {
     createEventHandlers,
+    playHandler
 }

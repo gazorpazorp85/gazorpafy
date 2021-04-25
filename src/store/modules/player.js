@@ -1,4 +1,5 @@
 import { playerService } from '../../services/player.service';
+import { socketService } from '../../services/socket.service';
 import { spotifyService } from '../../services/spotify.service';
 
 export const playerStore = {
@@ -24,6 +25,9 @@ export const playerStore = {
     duration({ playerState }) {
       return playerState?.duration;
     },
+    isPlaying({ deviceState }) {
+      return deviceState?.is_playing;
+    },
     songInfo({ playerState }) {
       const currentTrack = playerState?.track_window?.current_track;
       const albumImage = currentTrack?.album.images[0];
@@ -32,14 +36,17 @@ export const playerStore = {
       const id = currentTrack?.id;
       return { artistName, albumImage, id, trackName };
     },
-    shuffleState({deviceState}) {
+    shuffleState({ deviceState }) {
       return deviceState?.shuffle_state;
     },
-    repeatState({deviceState}) {
+    repeatState({ deviceState }) {
       return deviceState?.repeat_state;
     },
     volume({ deviceState }) {
       return deviceState?.device?.volume_percent;
+    },
+    deviceState({ deviceState }) {
+      return deviceState;
     }
   },
   mutations: {
@@ -60,7 +67,7 @@ export const playerStore = {
     }
   },
   actions: {
-    async init({ commit, dispatch }, token) {
+    init({ commit, dispatch }, token) {
       try {
         const player = new window.Spotify.Player({
           name: "Gazorpafy Player",
@@ -76,19 +83,19 @@ export const playerStore = {
     async deviceState({ commit }) {
       try {
         const deviceState = await spotifyService.getData('me/player');
-        console.log('deviceState', deviceState);
         commit({ type: 'deviceState', deviceState });
       } catch (err) {
         console.log('failed to get device state', err);
       }
     },
     async updateState({ commit }, { newState }) {
-      const currentState = newState ?? await this.getters.player.getCurrentState();
+      const currentState = newState;
       commit({ type: 'updateState', currentState })
     },
-    play({ getters }) {
+    async play({ getters }) {
       const { player } = getters;
-      player.togglePlay();
+      await player.togglePlay();
+      // socketService.emit('change');
     },
     async seek({ getters, dispatch }, newPosition) {
       const { deviceId } = getters;

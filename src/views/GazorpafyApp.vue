@@ -14,12 +14,17 @@ import NavBar from '@/cmps/NavBar';
 import Player from '@/cmps/Player';
 import SideBar from '@/cmps/SideBar';
 
-import { spotifyService } from '@/services/spotify.service';
-
 export default {
   name: 'GazorpafyApp',
+  methods: {
+    async getData() {
+      await this.$store.dispatch('getUserData');
+      await this.$store.dispatch('getRecommendations');
+      await this.$store.dispatch('getFeaturedPlaylists');
+    }
+  },
   created() {
-    this.$store.dispatch('getUserData');
+    this.getData();
   },
   components: {
     NavBar,

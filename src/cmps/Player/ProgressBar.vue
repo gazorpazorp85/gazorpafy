@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import { Observable } from 'rxjs';
-
 import { utilService } from '@/services/util.service';
 import { socketService } from '@/services/socket.service';
 
@@ -35,7 +33,7 @@ export default {
       barPosition: null,
       barInterval: null,
       isHovered: false,
-      isPlaying: false
+      isPlayingLocal: false
     }
   },
   methods: {
@@ -46,24 +44,28 @@ export default {
       this.$store.dispatch('seek', this.barPosition);
     },
     progressHandler() {
-      if (!this.duration && !this.position) return;
-      this.isPlaying = true;
-      if (!this.barInterval && this.isPlaying) {
+      if (!this.duration && !this.barPosition) return;
+      if (!this.isPlaying && !this.playerState.paused) return;
+      if (this.isPlaying && !this.isPlayingLocal) {
+        console.log('inside if');
         this.barInterval = setInterval(() => {
           this.barPosition = parseInt(this.barPosition) + 1000;
         }, 1000);
+        this.isPlayingLocal = true;
       } else {
+        console.log('inside else');
         clearInterval(this.barInterval);
         this.barInterval = null;
-        this.isPlaying = false;
+        this.isPlayingLocal = false;
         if (this.barPosition >= this.duration) this.barPosition = null;
       }
     },
     resetPlayer() {
+      console.log('inside resetPlayer');
       this.barPosition = this.position;
       clearInterval(this.barInterval);
       this.barInterval = null;
-      this.isPlaying = false;
+      this.isPlayingLocal = this.isPlaying;
     }
   },
   computed: {
@@ -87,25 +89,37 @@ export default {
     playerState() {
       return this.$store.getters.playerState;
     },
+    isPlaying() {
+      return this.$store.getters.isPlaying;
+    },
+    deviceState() {
+      return this.$store.getters.deviceState;
+    }
   },
   created() {
-    socketService.on('play', this.progressHandler);
     socketService.on('change', this.resetPlayer);
+    socketService.on('play', this.progressHandler);
     this.barPosition = this.position;
   },
   destroyed() {
-    socketService.off('play');
     socketService.off('change');
+    socketService.off('play');
   },
   watch: {
     position() {
       this.barPosition = this.position;
     },
-    'playerState.track_window.current_track': function (to, from) {
-      if (to?.uid !== from?.uid && !this.isPlaying) {
-        this.resetPlayer();
+    isPlaying(to, from) {
+      if (to !== from) {
+        this.progressHandler();
       }
     },
+    playerState(to, from) {
+      if (to?.track_window.current_track.id !== from?.track_window.current_track.id) {
+        this.progressHandler();
+        if (!to?.paused) this.progressHandler();
+      }
+    }
   }
 }
 </script>

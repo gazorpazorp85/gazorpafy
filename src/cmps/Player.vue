@@ -58,14 +58,33 @@ export default {
       }
     },
     play() {
-      this.$store.dispatch('play');
-      socketService.emit('play');
+      this.$store.dispatch('play')
+        .then(() => socketService.emit('play'));
     },
-    previousTrack() {
-      this.$store.getters.player.previousTrack();
+    // async play() {
+    //   await this.$store.dispatch('play')
+    //   socketService.emit('play');
+    // },
+    async previousTrack() {
+      try {
+        await this.$store.getters.player.previousTrack();
+        socketService.emit('change');
+      } catch (err) {
+        console.log('error while getting previous track', err);
+      }
     },
-    nextTrack() {
-      this.$store.getters.player.nextTrack();
+    // nextTrack() {
+    //   this.$store.getters.player.nextTrack()
+    //     .then(() => socketService.emit('change'))
+    //     .catch((err) => )
+    // },
+    async nextTrack() {
+      try {
+        await this.$store.getters.player.nextTrack();
+        socketService.emit('change');
+      } catch (err) {
+        console.log('error while getting next track', err);
+      }
     },
     async shuffle() {
       try {
@@ -125,6 +144,6 @@ export default {
   },
   created() {
     this.playerInterval = setInterval(this.checkForPlayer, 1000);
-  }
+  },
 }
 </script>

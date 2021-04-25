@@ -27,17 +27,21 @@
     </div>
     <div class="flex center column info-container">
       <router-link
-        v-if="item.type !== 'track'"
-        :to="{ name: `${item.type}`, params: getParams }"
+        :to="{
+          name: `${item.type === 'track' ? 'album' : item.type}`,
+          params: getParams,
+        }"
         :class="`title ${item.type}`"
       >
         {{ item.name }}
       </router-link>
-      <div v-else :class="`title ${item.type}`">
+      <!-- <div v-else :class="`title ${item.type}`">
         {{ item.name }}
-      </div>
+      </div> -->
       <div class="info" v-if="item.artists">{{ item.artists[0].name }}</div>
-      <div class="uppercase info" v-if="item.tracks">{{ item.tracks.total }} tracks</div>
+      <div class="uppercase info" v-if="item.tracks">
+        {{ item.tracks.total }} tracks
+      </div>
     </div>
   </div>
 </template>
@@ -69,21 +73,18 @@ export default {
     },
     async play() {
       try {
-        const { deviceId, token } = this.$store.getters;
         let uris = [];
         if (this.item.type === 'playlist') {
           const playlist = await spotifyService.getDetails(this.item.id, 'playlists');
           uris = playlist.tracks.items.map(({ track }) => track.uri);
         } else {
+          const { token } = this.$store.getters;
           const { tracks } = await spotifyService.get(`${this.item.href}/top-tracks?market=IL`, token);
           uris = tracks.map(track => track.uri);
         }
-        await spotifyService.playTrack(uris, deviceId, token);
-        this.$store.dispatch('updateState', { newState: null });
-        socketService.emit('change');
-        setTimeout(() => socketService.emit('play'), 200);
+        playerService.playHandler(this.$store.dispatch, this.$store.getters, uris);
       } catch (err) {
-        console.log('failed to play track', err);
+        console.log('can\'t play track from preview', err);
       }
     }
   },
@@ -93,7 +94,8 @@ export default {
       return description.length > 45 ? description.substring(0, 45) + '...' : description;
     },
     getParams() {
-      return this.item.type === 'album' ? { id: this.item.id, group: this.item.album_group, type: this.item.album_type } : { id: this.item.id };
+      return this.item.type === 'album' ? { id: this.item.id, group: this.item.album_group, type: this.item.album_type } :
+        this.item.type === 'track' ? { id: this.item.album.id, type: this.item.album.album_type } : { id: this.item.id };
     },
     imageToRender() {
       return this.item.images?.length > 0 ? this.item.images[0].url :

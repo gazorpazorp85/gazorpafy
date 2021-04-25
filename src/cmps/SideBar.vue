@@ -7,10 +7,11 @@
         :key="link.id"
         :to="link.href"
         class="flex center"
-        
       >
         <div>
-          <span class="material-icons"> {{ link.iconName }} </span>
+          <span :class="`material-icons ${link.iconName}`">
+            {{ link.iconName }}
+          </span>
           <span>{{ link.txt }}</span>
         </div>
       </router-link>
