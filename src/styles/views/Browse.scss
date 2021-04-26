@@ -1,37 +1,6 @@
 .browse-container {
     padding: 80px 20px 20px;
 
-    & .nav-bar {
-        & :first-child {
-            margin-inline-end: 20px;
-        }
-
-        div {
-            position: relative;
-            max-width: 150px;
-            width: fit-content;
-            text-transform: uppercase;
-            font-family: "arimo-bold";
-            font-size: rem(13.5px);
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
-
-        .active {
-            color: $clr1;
-
-            &::after {
-                content: "____";
-                position: absolute;
-                color: transparent;
-                top: 6px;
-                right: 50px;
-                border-bottom: 3px solid #1db954;
-                border-radius: 2px;
-            }
-        }
-    }
-
     & .subtitle-container {
         max-width: 1330px;
         // width: 100%;

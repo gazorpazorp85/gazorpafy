@@ -91,7 +91,7 @@ export default new Vuex.Store({
         const items = Array
           .from(new Set(artistsInfo.map(artist => artist.id)))
           .map(id => artistsInfo.find(artist => artist.id === id))
-          .splice(0, 1);
+          .slice(1);
         const data = { id: utilService.getRandomId(), title: `similar to ${tracks[0].artists[0].name}`, items, type: 'artists' };
         commit({ type: 'userData', data });
       } catch (err) {

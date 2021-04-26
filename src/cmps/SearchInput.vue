@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   data() {
     return {
@@ -20,7 +22,7 @@ export default {
   },
   methods: {
     search() {
-      const query = JSON.parse(JSON.stringify(this.query));
+      const query = _.cloneDeep(this.query);
       this.$emit('search', query);
     }
   }

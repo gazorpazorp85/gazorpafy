@@ -2,9 +2,9 @@
   <div class="browse-container">
     <div class="main-container preview-container">
       <h1>Browse</h1>
-      <BrowseNavBar :name="getEndpoint.name" @go="endpointHandler" />
+      <CmpsNavBar :endpoints="endpoints" :selected="getEndpoint.name" @go="endpointHandler" />
       <div class="subtitle-container">
-          {{getEndpoint.title}}
+        {{ getEndpoint.title }}
       </div>
       <List
         :items="getItems"
@@ -18,7 +18,7 @@
 
 <script>
 import List from '@/cmps/List';
-import BrowseNavBar from '@/cmps/Browse/BrowseNavBar'
+import CmpsNavBar from '@/cmps/CmpsNavBar'
 
 import { spotifyService } from '@/services/spotify.service';
 
@@ -55,10 +55,16 @@ export default {
     },
   },
   computed: {
+    endpoints() {
+      return [
+        { name: 'categories', title: 'genres & moods' },
+        { name: 'newReleases', title: 'new releases' }
+      ]
+    },
     getEndpoint() {
       const endpointsMap = {
         categories: { name: 'categories', type: 'browseCategory', title: 'Genres & Moods' },
-        newReleases: { name: 'newReleases', type: 'albums', title: 'New albums & singles'  }
+        newReleases: { name: 'newReleases', type: 'albums', title: 'New albums & singles' }
       };
       return endpointsMap[this.endpoint];
     },
@@ -70,7 +76,7 @@ export default {
     }
   },
   components: {
-    BrowseNavBar,
+    CmpsNavBar,
     List
   },
   created() {

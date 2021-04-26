@@ -1,0 +1,23 @@
+.fans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 215px));
+    grid-gap: 70px 30px;
+    justify-items: center;
+    padding-bottom: 70px;
+
+    .card-container {
+        & img {
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            object-fit: cover;
+
+            & + a {
+                color: $clr1;
+                margin-top: 20px;
+                font-size: rem(14px);
+                font-family: "arimo-bold";
+            }
+        }
+    }
+}

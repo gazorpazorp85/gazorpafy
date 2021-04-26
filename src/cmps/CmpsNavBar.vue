@@ -1,9 +1,9 @@
 <template>
-  <div class="flex nav-bar">
+  <div class="flex cmps-nav-bar">
     <div
       v-for="endpoint in endpoints"
       :key="endpoint.name"
-      :class="name === endpoint.name ? 'active' : ''"
+      :class="selected === endpoint.name ? 'active' : ''"
       @click="$emit('go', endpoint.name)"
     >
       {{ endpoint.title }}
@@ -14,17 +14,13 @@
 <script>
 export default {
   props: {
-    name: {
+    selected: {
       type: String,
       required: true
-    }
-  },
-  data() {
-    return {
-      endpoints: [
-        { name: 'categories', title: 'genres & moods' },
-        { name: 'newReleases', title: 'new releases' }
-      ]
+    },
+    endpoints: {
+      type: Array,
+      required: true
     }
   }
 }

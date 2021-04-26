@@ -47,9 +47,6 @@ export default {
       return this.type !== 'browseCategory';
     }
   },
-  created() {
-    console.log('route', this.$route.name === 'search');
-  },
   components: {
     BrowsePreview,
     Preview,

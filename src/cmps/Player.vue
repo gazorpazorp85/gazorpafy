@@ -52,7 +52,9 @@ export default {
   },
   methods: {
     checkForPlayer() {
+      console.log('inside checkForPlayer');
       if (window.Spotify) {
+        console.log('inside checkForPlayer if');
         this.$store.dispatch('init', this.$store.getters.token);
         clearInterval(this.playerInterval);
       }
@@ -144,6 +146,13 @@ export default {
   },
   created() {
     this.playerInterval = setInterval(this.checkForPlayer, 1000);
+    document.addEventListener('keyup', (e) => {
+      const { keyCode, target } = e;
+      if (keyCode === 32 && !e.target.classList.contains('searchInput')) this.play();
+    })
   },
+  destroyed() {
+    document.removeEventListener('keyup', this.play);
+  }
 }
 </script>

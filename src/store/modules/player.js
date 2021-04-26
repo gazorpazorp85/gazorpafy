@@ -67,7 +67,7 @@ export const playerStore = {
     }
   },
   actions: {
-    init({ commit, dispatch }, token) {
+    async init({ commit, dispatch }, token) {
       try {
         const player = new window.Spotify.Player({
           name: "Gazorpafy Player",
@@ -75,7 +75,7 @@ export const playerStore = {
         });
         commit({ type: 'player', player });
         playerService.createEventHandlers(player, dispatch, commit);
-        player.connect();
+        await player.connect();
       } catch (err) {
         console.log('failed to initialize player', err);
       }

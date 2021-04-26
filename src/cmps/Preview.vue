@@ -22,10 +22,15 @@
       {{ item.name }}
     </router-link>
     <div v-if="item.description" class="description">{{ longTxt }}</div>
-    <div class="album-info" v-if="isNewRelease">{{ item.artists[0].name }}</div>
-    <div class="album-info" v-else-if="item.type === 'album'">
+    <div
+      class="album-info"
+      v-if="isNewRelease || ($route.name !== 'artist' && item.type === 'album')"
+    >
       {{ item.artists[0].name }}
     </div>
+    <!-- <div class="album-info" v-else-if="item.type === 'album'">
+      {{ item.artists[0].name }}
+    </div> -->
     <div class="album-info" v-else-if="item.release_date">
       {{ item.release_date.substring(0, 4) }}
     </div>

@@ -9,21 +9,46 @@
         <button class="play">play</button>
         <button>follow</button>
       </div>
-      <!-- <div class="flex">
-        <div class="uppercase">overview</div>
-        <div class="uppercase">fans also like</div>
-      </div> -->
+      <CmpsNavBar
+        :endpoints="endpoints"
+        :selected="endpoint"
+        @go="emitEndpoint"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import CmpsNavBar from '@/cmps/CmpsNavBar';
+
+import { socketService } from '@/services/socket.service';
+
 export default {
   props: {
     artist: {
       type: Object,
       required: true
+    },
+    endpoint: {
+      type: String,
+      required: true
     }
+  },
+  methods: {
+    emitEndpoint(value) {
+      socketService.emit('go', value);
+    }
+  },
+  computed: {
+    endpoints() {
+      return [
+        { name: 'overview', title: 'overview' },
+        { name: 'fans', title: 'fans also like' }
+      ]
+    },
+  },
+  components: {
+    CmpsNavBar
   }
 }
 </script>

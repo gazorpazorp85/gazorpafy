@@ -15,6 +15,7 @@
 
 
 <script>
+import _ from 'lodash';
 
 import List from './List';
 import Preview from './Preview';
@@ -40,7 +41,7 @@ export default {
   },
   computed: {
     itemsToShow() {
-      const items = JSON.parse(JSON.stringify(this.playlist.items));
+      const items = _.cloneDeep(this.playlist.items);
       return items.slice(this.idx, this.idx + 6);
     }
   },

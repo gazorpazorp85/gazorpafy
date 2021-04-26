@@ -36,8 +36,5 @@ export default {
       return this.$store.getters.songInfo;
     },
   },
-  created() {
-    console.log('route', this.$route);
-  },
 }
 </script>

@@ -1,4 +1,5 @@
 .details-container {
+    height: 100%;
     padding: 80px 20px 0;
 
     & .artist-info {
@@ -29,6 +30,8 @@
     }
 
     & .fans-like-container {
+        width: calc(100% - 950px);
+
         & .artist-icon {
             background-color: #333;
             width: 50px;
@@ -42,7 +45,13 @@
         }
 
         .title {
+            font-family: "arimo-bold";
             margin-bottom: 15px;
+
+            &:hover {
+                text-decoration: underline;
+                text-underline-offset: 3px;
+            }
         }
     }
 
@@ -60,14 +69,16 @@
     }
 
     & .track-list {
-        height: 44px;
         border-bottom: 1px solid $clr6;
         padding-inline-end: 10px;
 
-        & img + div {
-            color: $clr4;
-            width: 20px;
-            margin-inline-start: 10px;
+        & img {
+            height: 40px;
+            & + div {
+                color: $clr4;
+                width: 20px;
+                margin-inline-start: 10px;
+            }
         }
 
         & div {
@@ -93,6 +104,11 @@
 
         &:not(:last-child) {
             margin-bottom: 10px;
+        }
+
+        &:hover {
+            background-color: #232323;
+            text-decoration: none;
         }
 
         & img {
